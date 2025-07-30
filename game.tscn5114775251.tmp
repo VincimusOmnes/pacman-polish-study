@@ -1,0 +1,15 @@
+[gd_scene load_steps=4 format=3 uid="uid://dfuxcfhse4nt3"]
+
+[ext_resource type="PackedScene" uid="uid://cv6fv0t3bd18v" path="res://maze.tscn" id="1_e2o6t"]
+[ext_resource type="Script" uid="uid://kmcywng375dq" path="res://game.gd" id="1_feb5d"]
+[ext_resource type="PackedScene" uid="uid://50q72se6ljdc" path="res://pacman.tscn" id="2_feb5d"]
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_feb5d")
+
+[node name="Maze" parent="." instance=ExtResource("1_e2o6t")]
+position = Vector2(260, 287)
+
+[node name="Pacman" parent="." instance=ExtResource("2_feb5d")]
+position = Vector2(260, 434)
+scale = Vector2(2.3, 2.3)

@@ -1,0 +1,144 @@
+[gd_scene load_steps=4 format=3 uid="uid://cv6fv0t3bd18v"]
+
+[ext_resource type="Texture2D" uid="uid://bcgqmaioxxdq6" path="res://assets/maze.png" id="1_dj01w"]
+[ext_resource type="Script" uid="uid://dm3ogg1xhdmdj" path="res://maze.gd" id="1_h41xc"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dj01w"]
+size = Vector2(44, 16)
+
+[node name="Maze" type="Node2D"]
+script = ExtResource("1_h41xc")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_dj01w")
+
+[node name="Wall" type="StaticBody2D" parent="."]
+collision_layer = 16777215
+collision_mask = 0
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Wall"]
+polygon = PackedVector2Array(28, -72, 28, -64, 4, -64, 4, -40, -4, -40, -4, -64, -28, -64, -28, -72)
+
+[node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="Wall"]
+polygon = PackedVector2Array(-20, -40, -20, -48, -44, -48, -44, -72, -52, -72, -52, -16, -44, -16, -44, -40)
+
+[node name="CollisionPolygon2D3" type="CollisionPolygon2D" parent="Wall"]
+polygon = PackedVector2Array(20, -40, 20, -48, 44, -48, 44, -72, 52, -72, 52, -16, 44, -16, 44, -40)
+
+[node name="CollisionPolygon2D4" type="CollisionPolygon2D" parent="Wall"]
+polygon = PackedVector2Array(-4, 56, 4, 56, 4, 32, 28, 32, 28, 24, -28, 24, -28, 32, -4, 32)
+
+[node name="CollisionPolygon2D5" type="CollisionPolygon2D" parent="Wall"]
+polygon = PackedVector2Array(-4, 104, 4, 104, 4, 80, 28, 80, 28, 72, -28, 72, -28, 80, -4, 80)
+
+[node name="CollisionPolygon2D6" type="CollisionPolygon2D" parent="Wall"]
+polygon = PackedVector2Array(-92, 104, -92, 96, -52, 96, -52, 72, -44, 72, -44, 96, -20, 96, -20, 104)
+
+[node name="CollisionPolygon2D7" type="CollisionPolygon2D" parent="Wall"]
+polygon = PackedVector2Array(44, 72, 52, 72, 52, 96, 92, 96, 92, 104, 20, 104, 20, 96, 44, 96)
+
+[node name="CollisionPolygon2D8" type="CollisionPolygon2D" parent="Wall"]
+polygon = PackedVector2Array(-76, 80, -68, 80, -68, 48, -92, 48, -92, 56, -76, 56)
+
+[node name="CollisionPolygon2D9" type="CollisionPolygon2D" parent="Wall"]
+polygon = PackedVector2Array(68, 80, 76, 80, 76, 56, 92, 56, 92, 48, 68, 48)
+
+[node name="CollisionPolygon2D10" type="CollisionPolygon2D" parent="Wall"]
+polygon = PackedVector2Array(68, -64, 68, -72, 92, -72, 92, -64)
+
+[node name="CollisionPolygon2D11" type="CollisionPolygon2D" parent="Wall"]
+polygon = PackedVector2Array(-92, -64, -92, -72, -68, -72, -68, -64)
+
+[node name="CollisionPolygon2D12" type="CollisionPolygon2D" parent="Wall"]
+polygon = PackedVector2Array(68, -88, 68, -104, 92, -104, 92, -88)
+
+[node name="CollisionPolygon2D13" type="CollisionPolygon2D" parent="Wall"]
+polygon = PackedVector2Array(20, -104, 52, -104, 52, -88, 20, -88)
+
+[node name="CollisionPolygon2D14" type="CollisionPolygon2D" parent="Wall"]
+polygon = PackedVector2Array(-20, -88, -20, -104, -52, -104, -52, -88)
+
+[node name="CollisionPolygon2D15" type="CollisionPolygon2D" parent="Wall"]
+polygon = PackedVector2Array(-68, -88, -68, -104, -92, -104, -92, -88)
+
+[node name="CollisionPolygon2D16" type="CollisionPolygon2D" parent="Wall"]
+polygon = PackedVector2Array(-52, 0, -44, 0, -44, 32, -52, 32)
+
+[node name="CollisionPolygon2D17" type="CollisionPolygon2D" parent="Wall"]
+polygon = PackedVector2Array(44, 0, 52, 0, 52, 32, 44, 32)
+
+[node name="CollisionPolygon2D18" type="CollisionPolygon2D" parent="Wall"]
+polygon = PackedVector2Array(-52, 56, -52, 48, -20, 48, -20, 56)
+
+[node name="CollisionPolygon2D19" type="CollisionPolygon2D" parent="Wall"]
+polygon = PackedVector2Array(20, 56, 20, 48, 52, 48, 52, 56)
+
+[node name="CollisionPolygon2D20" type="CollisionPolygon2D" parent="Wall"]
+polygon = PackedVector2Array(-4, -88, -4, -120, -108, -120, -108, -48, -68, -48, -68, -16, -112, -16, -112, -20, -72, -20, -72, -44, -112, -44, -112, -124, 112, -124, 112, -44, 72, -44, 72, -20, 112, -20, 112, -16, 68, -16, 68, -48, 108, -48, 108, -120, 4, -120, 4, -88)
+
+[node name="CollisionPolygon2D21" type="CollisionPolygon2D" parent="Wall"]
+polygon = PackedVector2Array(-112, 0, -68, 0, -68, 32, -108, 32, -108, 72, -92, 72, -92, 80, -108, 80, -108, 120, 108, 120, 108, 80, 92, 80, 92, 72, 108, 72, 108, 32, 68, 32, 68, 0, 112, 0, 112, 4, 72, 4, 72, 28, 112, 28, 112, 124, -112, 124, -112, 28, -72, 28, -72, 4, -112, 4)
+
+[node name="CollisionPolygon2D22" type="CollisionPolygon2D" parent="Wall"]
+polygon = PackedVector2Array(-24, -20, -8, -20, -8, -24, -28, -24, -28, 8, 28, 8, 28, -24, 8, -24, 8, -20, 24, -20, 24, 4, -24, 4)
+
+[node name="WarpTunnelRight" type="Area2D" parent="."]
+position = Vector2(90, -8)
+collision_layer = 16777215
+collision_mask = 16777215
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WarpTunnelRight"]
+shape = SubResource("RectangleShape2D_dj01w")
+
+[node name="WarpTunnelRightEnd" type="Area2D" parent="."]
+position = Vector2(135, -8)
+collision_layer = 16777215
+collision_mask = 16777215
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WarpTunnelRightEnd"]
+shape = SubResource("RectangleShape2D_dj01w")
+
+[node name="WarpTunnelLeft" type="Area2D" parent="."]
+position = Vector2(-90, -8)
+collision_layer = 16777215
+collision_mask = 16777215
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WarpTunnelLeft"]
+shape = SubResource("RectangleShape2D_dj01w")
+
+[node name="WarpTunnelLeftEnd" type="Area2D" parent="."]
+position = Vector2(-135, -8)
+collision_layer = 16777215
+collision_mask = 16777215
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WarpTunnelLeftEnd"]
+shape = SubResource("RectangleShape2D_dj01w")
+
+[node name="GhostGate" type="StaticBody2D" parent="."]
+collision_layer = 16777215
+collision_mask = 0
+
+[node name="GhostGate" type="CollisionPolygon2D" parent="GhostGate"]
+polygon = PackedVector2Array(-8, -24, 8, -24, 8, -20, -8, -20)
+
+[node name="Patrol" type="Node2D" parent="."]
+position = Vector2(-112, -124)
+
+[node name="Shadow" type="Marker2D" parent="Patrol"]
+position = Vector2(212, 29)
+
+[node name="Speedy" type="Marker2D" parent="Patrol"]
+position = Vector2(12, 29)
+
+[node name="Bashful" type="Marker2D" parent="Patrol"]
+position = Vector2(212, 224)
+
+[node name="Pokey" type="Marker2D" parent="Patrol"]
+position = Vector2(12, 224)
+
+[connection signal="body_entered" from="WarpTunnelRight" to="." method="_on_warp_tunnel_body_entered"]
+[connection signal="body_exited" from="WarpTunnelRight" to="." method="_on_warp_tunnel_body_exited"]
+[connection signal="body_entered" from="WarpTunnelRightEnd" to="." method="_on_warp_tunnel_right_end_body_entered"]
+[connection signal="body_entered" from="WarpTunnelLeft" to="." method="_on_warp_tunnel_body_entered"]
+[connection signal="body_exited" from="WarpTunnelLeft" to="." method="_on_warp_tunnel_body_exited"]
+[connection signal="body_entered" from="WarpTunnelLeftEnd" to="." method="_on_warp_tunnel_left_end_body_entered"]
