@@ -24,9 +24,27 @@ func reborn(reduce_extra_life: bool):
 	if reduce_extra_life:
 		Globals.extra_life -= 1
 	if Globals.extra_life >= 0:
-		var current_scene = get_tree().current_scene
-		var scene_path = current_scene.scene_file_path
-		get_tree().change_scene_to_file(scene_path)
+		pass
+	else:
+		reset_game_variables()
+	var current_scene = get_tree().current_scene
+	var scene_path = current_scene.scene_file_path
+	get_tree().change_scene_to_file(scene_path)
+
+func reset_game_variables():
+	Globals.game_level = 1
+	Globals.score = 0
+	Globals.is_game_paused = true
+	Globals.is_game_ended = false
+	Globals.is_game_just_ended = false
+	Globals.extra_life = 2
+	Globals.pellets_eaten_string.clear()
+	Globals.pellets_eaten = 0
+	
+
+func check_game_over():
+	if Globals.extra_life < 1:
+		print("GAME OVER!..")
 
 func eat_pellet():
 	Globals.pellets_eaten += 1
@@ -67,9 +85,9 @@ func check_cruise_elroy():
 func check_ghost_spawn():
 	if Globals.pellets_eaten >= 6 and speedy_node.did_spawned == false and speedy_node.is_spawning == false:
 		speedy_node.spawn_ghost()
-	elif Globals.pellets_eaten >= 30 and bashful_node.did_spawned == false and bashful_node.is_spawning == false:
+	if Globals.pellets_eaten >= 30 and bashful_node.did_spawned == false and bashful_node.is_spawning == false:
 		bashful_node.spawn_ghost()
-	elif Globals.pellets_eaten >= 60 and pokey_node.did_spawned == false and pokey_node.is_spawning == false:
+	if Globals.pellets_eaten >= 60 and pokey_node.did_spawned == false and pokey_node.is_spawning == false:
 		pokey_node.spawn_ghost()
 
 func _on_ghost_mode_cycle_timeout() -> void:
@@ -140,6 +158,8 @@ func get_pacman_overlap() -> Array[CharacterBody2D]:
 	return bodies
 
 func _ready() -> void:
+	Globals.game_speed = 1.0 + float(Globals.game_level-1) / 10
+	#print("Game speed: " + str(Globals.game_speed))
 	if Globals.pellets_eaten_string.size() > 0:
 		for child in pellets_node.get_children():
 			if Globals.pellets_eaten_string.has(child.name):
@@ -149,6 +169,8 @@ func _ready() -> void:
 				child.queue_free()
 	Globals.is_game_ended = false
 	Globals.is_game_paused = true
+	check_cruise_elroy()
+	check_ghost_spawn()
 	sounds_node.play_start_sound()
 	blink_power_pellets()
 	draw_extra_life_icon()
@@ -196,6 +218,7 @@ func _process(delta: float) -> void:
 							Globals.is_game_ended = true
 							Globals.is_game_just_ended = true
 							sounds_node.play_death_sound()
+							check_game_over()
 					elif ghost.is_frightened == true: # yedin
 						ghost.die()
 		if Globals.pellets_eaten == 244:
