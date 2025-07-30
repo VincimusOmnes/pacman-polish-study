@@ -1,8 +1,10 @@
 extends Node
 
+var cheat_activated := false
+
 var game_level: int = 1
 var score: int = 0
-var game_speed := 2.0 + float(game_level-1) / 10
+var game_speed := 1.0 + float(game_level-1) / 10
 var is_game_paused := true
 var is_game_ended := false
 var is_game_just_ended := false
@@ -18,6 +20,13 @@ var direction_string = {
 	Vector2.UP: "up",
 	Vector2.DOWN: "down"
 }
+
+const first_item_pellet := 70
+const second_item_pellet := 170
+
+
+
+const item_index_level := [0, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6] # access [game_level-1] and if level is more than 13 always key
 
 func get_reverse_direction(direction: Vector2) -> Vector2:
 	match direction:

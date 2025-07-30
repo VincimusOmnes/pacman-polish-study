@@ -1,5 +1,6 @@
 extends Node2D
 
+@onready var maze_node: Node2D = $Maze
 @onready var blink_timer_node: Timer = $BlinkTimer
 @onready var frighten_timer_node: Timer = $FrightenTimer
 @onready var ghost_mode_cycle_node: Timer = $GhostModeCycle
@@ -17,8 +18,7 @@ extends Node2D
 
 var ghost_mode_index := 0
 var ghost_mode_timer := [7.0, 20.0, 7.0, 20.0, 5.0]
-
-
+var level_end := false
 
 func reborn(reduce_extra_life: bool):
 	if reduce_extra_life:
@@ -27,6 +27,19 @@ func reborn(reduce_extra_life: bool):
 		var current_scene = get_tree().current_scene
 		var scene_path = current_scene.scene_file_path
 		get_tree().change_scene_to_file(scene_path)
+
+func eat_pellet():
+	Globals.pellets_eaten += 1
+	check_cruise_elroy()
+
+func add_extra_life():
+	Globals.extra_life += 1
+	draw_extra_life_icon()
+
+func add_score(value: int):
+	if Globals.score / 10000 == (Globals.score-value) / 10000 + 1:
+		add_extra_life()
+	Globals.score += value
 
 func start_game():
 	Globals.is_game_paused = false
@@ -86,12 +99,16 @@ func _on_blink_timer_timeout() -> void:
 		child.adjust_animation()
 
 func frighten_ghosts():
-	ghost_mode_cycle_node.paused = true
-	frighten_timer_node.start(12.0  / Globals.game_speed)
-	blink_timer_node.start(8.0 / Globals.game_speed)
+	var frighten_time_array := [6.0, 5.0, 4.0, 3.0, 2.0, 5.0, 2.0, 2.0, 1.0, 1.0, 1.0, 1.0, 1.0]
+	if frighten_time_array.size() > Globals.game_level-1: # after level 14, ghost will not afraid
+		ghost_mode_cycle_node.paused = true
+		frighten_timer_node.start(frighten_time_array[Globals.game_level-1])
+		blink_timer_node.start(max(frighten_time_array[Globals.game_level-1] -2, 0.001))
 	for child in ghosts_node.get_children():
-		child.is_frightened = true
-		child.is_last_2_second = false
+		if frighten_time_array.size() > Globals.game_level-1: # after level 14, ghost will not afraid
+			child.is_frightened = true
+			child.is_last_2_second = false
+		child.change_direction(Globals.get_reverse_direction(child.direction))
 		child.adjust_animation()
 
 func blink_power_pellets():
@@ -102,11 +119,24 @@ func stop_power_pellets():
 	for child in power_pellets_node.get_children():
 		child.stop_animation()
 
+func level_ended():
+	level_end = true
+	Globals.is_game_ended = true
+	Globals.is_game_paused = true
+	Globals.game_level += 1
+	Globals.pellets_eaten = 0
+	Globals.pellets_eaten_string.clear()
+	await maze_node.blink_maze()
+	reborn(false)
+	
+	
+
 func get_pacman_overlap() -> Array[CharacterBody2D]:
 	var bodies: Array[CharacterBody2D] = []
 	for ghost in ghosts_node.get_children():
 		if pacman_node.is_overlapping_with(ghost):
-			bodies.append(ghost)
+			if Globals.cheat_activated == false:
+				bodies.append(ghost)
 	return bodies
 
 func _ready() -> void:
@@ -124,12 +154,35 @@ func _ready() -> void:
 	draw_extra_life_icon()
 
 func _input(event: InputEvent) -> void:
-	if event is InputEventKey and event.pressed and Globals.is_game_ended == true:
+	if event is InputEventKey and event.pressed:
 		if event.keycode == KEY_ENTER:
-			reborn(true)
-	elif event is InputEventKey and event.pressed:
-		if event.keycode == KEY_ESCAPE:
+			if Globals.is_game_ended == true and level_end == false:
+				reborn(true)
+		elif event.keycode == KEY_ESCAPE:
 			pause_game()
+		elif event.keycode == KEY_D:
+			for ghost in ghosts_node.get_children():
+				if ghost.is_frightened == true:
+					print(ghost.name + " is in FRIGHTEN mode")
+				elif ghost.cruise_elory == true:
+					print(ghost.name + " is in CRUSE ELORY mode")
+				elif ghost.chase == true and ghost.scatter == false:
+					print(ghost.name + " is in CHASE mode")
+				elif ghost.chase == false and ghost.scatter == true:
+					print(ghost.name + " is in SCATTER mode")
+		elif event.keycode == KEY_S:
+			print("Score is: " + str(Globals.score))
+		elif event.keycode == KEY_C:
+			if Globals.cheat_activated == true:
+				Globals.cheat_activated = false
+				print("Cheat deactivated!")
+			elif Globals.cheat_activated == false:
+				Globals.cheat_activated = true
+				print("Cheat activated!")
+		elif event.keycode == KEY_F:
+			if Globals.cheat_activated == true:
+				print("frighten ghost")
+				frighten_ghosts()
 	
 
 func _process(delta: float) -> void:
@@ -146,10 +199,11 @@ func _process(delta: float) -> void:
 					elif ghost.is_frightened == true: # yedin
 						ghost.die()
 		if Globals.pellets_eaten == 244:
-			Globals.is_game_ended = true
-			Globals.is_game_paused = true
+			level_ended()
 
 func draw_extra_life_icon():
+	for child in extra_lifes_node.get_children():
+		child.queue_free()
 	for i in range(Globals.extra_life):
 		var texture_node := TextureRect.new()
 		texture_node.name = "extra_life_" + str(i+1)

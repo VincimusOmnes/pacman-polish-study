@@ -3,6 +3,14 @@ extends Node2D
 @onready var ghost_gate_node: StaticBody2D = $GhostGate
 @onready var sprite_2d_node: Sprite2D = $Sprite2D
 
+func blink_maze():
+	var maze_sprite := preload("res://assets/maze.png")
+	var maze_white_sprite := preload("res://assets/maze_white.png")
+	for i in range(3):
+		sprite_2d_node.texture = maze_white_sprite
+		await get_tree().create_timer(0.2).timeout
+		sprite_2d_node.texture = maze_sprite
+		await get_tree().create_timer(0.2).timeout
 
 func open_ghost_gate(ghost: CharacterBody2D):
 	ghost_gate_node.collision_layer = ghost_gate_node.collision_layer & ~ghost.collision_layer

@@ -6,11 +6,11 @@ extends Assets
 @onready var pacman: CharacterBody2D = $"../../Pacman"
 
 
-const DEFAULT_GHOST_SPEED := 45.0
+const DEFAULT_GHOST_SPEED := 40.0
 
 @export var color: String # red, orange, pink, cyan
 @export var ghost_speed := DEFAULT_GHOST_SPEED
-@export var ghost_spawn_speed := 30.0
+@export var ghost_spawn_speed := 25.0
 @export var did_spawned := false
 
 var pixel_last_direction_change := Vector2(0, 0)
@@ -30,16 +30,14 @@ var is_spawning_just_ended := false
 var spawn_x := 112.0
 var spawn_y := 92.0
 
+var zero_index := 0
+
 func enter_cruise_elory(level: int):
 	if is_frightened == false:
 		adjust_animation()
 		if level == 0:
 			ghost_speed = DEFAULT_GHOST_SPEED
-		elif level == 1:
-			
-			if cruise_elory == false:
-				print(name.to_upper() + " CRUISE ELORY ON!")
-			
+		elif level == 1:			
 			cruise_elory = true
 			ghost_speed = DEFAULT_GHOST_SPEED + 5
 		elif level == 2:
@@ -103,6 +101,10 @@ func _process(delta: float) -> void:
 		scatter = false
 	adjust_animation()
 
+func change_direction(next_direction := next_direction):
+	direction = next_direction
+	pixel_last_direction_change = position
+
 func _physics_process(delta: float) -> void:
 	if Globals.is_game_paused == false and Globals.is_game_ended == false and is_died == false:
 		if is_spawning_just_started == true:
@@ -151,14 +153,20 @@ func _physics_process(delta: float) -> void:
 				#print(Globals.direction_string[next_direction])
 				pass
 			
-			elif (flag == false and chase == true) or is_frightened == true or chase == false:
+			elif (flag == false and chase == true) or (flag == false and scatter == true) or is_frightened == true:
 				if possible.size() >= 1:
 					next_direction = possible[randi() % possible.size()]
 			
+			if velocity == Vector2.ZERO: # sıkışmaması için
+				zero_index += 1
+				if zero_index >= 3:
+					zero_index = 0
+					next_direction = Globals.get_reverse_direction(direction)
+					change_direction()
+			
 			
 			if next_direction != direction and (abs(position.x - pixel_last_direction_change.x) > 4 or abs(position.y - pixel_last_direction_change.y) > 4):
-				direction = next_direction
-				pixel_last_direction_change = position
+				change_direction()
 			
 			
 			
@@ -171,6 +179,7 @@ func _physics_process(delta: float) -> void:
 				set_asset_velocity(direction, temp_speed)
 			else:
 				velocity = Vector2.ZERO
+			
 		elif is_spawning == false and did_spawned == false: # ghost house
 			move_and_slide()
 			if can_move(direction * 0.1):
@@ -180,18 +189,6 @@ func _physics_process(delta: float) -> void:
 	
 	elif Globals.is_game_paused == true or Globals.is_game_ended == true:
 		pass
-	
-func _input(event):
-	if event is InputEventKey and event.pressed:
-		if event.keycode == KEY_D:
-			if is_frightened == true:
-				print(name + " is in FRIGHTEN mode")
-			elif cruise_elory == true:
-				print(name + " is in CRUSE ELORY mode")
-			elif chase == true and scatter == false:
-				print(name + " is in CHASE mode")
-			elif chase == false and scatter == true:
-				print(name + " is in SCATTER mode")
 
 func set_target() -> Vector2:
 	var taget := Vector2.ZERO
