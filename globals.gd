@@ -7,6 +7,8 @@ var is_game_paused := true
 var is_game_ended := false
 var is_game_just_ended := false
 var extra_life := 2
+var pellets_eaten_string: Array[String] = []
+var pellets_eaten := 0
 
 var directions = [Vector2.RIGHT, Vector2.LEFT, Vector2.UP, Vector2.DOWN]
 

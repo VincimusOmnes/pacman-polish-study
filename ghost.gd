@@ -157,11 +157,6 @@ func _physics_process(delta: float) -> void:
 			
 			
 			if next_direction != direction and (abs(position.x - pixel_last_direction_change.x) > 4 or abs(position.y - pixel_last_direction_change.y) > 4):
-				if name == "Shadow":
-					if flag == false:
-						pass#print("RANDOM")
-					else:
-						pass#print("Not random")
 				direction = next_direction
 				pixel_last_direction_change = position
 			

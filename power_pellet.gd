@@ -12,7 +12,9 @@ func stop_animation():
 
 func _on_body_entered(body: Node2D) -> void:
 	if body.name == "Pacman":
-		game_node.pellets_eaten += 1
+		Globals.pellets_eaten += 1
+		Globals.score += 50
+		Globals.pellets_eaten_string.append(name)
 		game_node.check_ghost_spawn()
 		game_node.check_cruise_elroy()
 		sounds_node.play_eat_pellet_sound()

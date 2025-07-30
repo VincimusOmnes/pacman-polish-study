@@ -5,7 +5,9 @@ extends Area2D
 
 func _on_body_entered(body: Node2D) -> void:
 	if body.name == "Pacman":
-		game_node.pellets_eaten += 1
+		Globals.pellets_eaten += 1
+		Globals.score += 10
+		Globals.pellets_eaten_string.append(name)
 		game_node.check_ghost_spawn()
 		game_node.check_cruise_elroy()
 		sounds_node.play_eat_pellet_sound()

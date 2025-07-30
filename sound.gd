@@ -18,7 +18,7 @@ func play_eat_pellet_sound():
 	var current = eat1_audio_node  if toggle else eat2_audio_node
 
 	if not current.playing:
-		if game_node.pellets_eaten % 2 == 1:
+		if Globals.pellets_eaten % 2 == 1:
 			current.stream = preload("res://assets/sound/eat_dot_0.wav")
 		else:
 			current.stream = preload("res://assets/sound/eat_dot_1.wav")
@@ -47,13 +47,13 @@ func _on_begininng_audio_finished() -> void:
 func check_siren_sound() -> bool:
 	var old_stream := siren_audio_node.stream
 	var new_stream
-	if game_node.pellets_eaten < 44:
+	if Globals.pellets_eaten < 44:
 		new_stream = preload("res://assets/sound/siren0.wav")
-	elif game_node.pellets_eaten < 94:
+	elif Globals.pellets_eaten < 94:
 		new_stream = preload("res://assets/sound/siren1.wav")
-	elif game_node.pellets_eaten < 164:
+	elif Globals.pellets_eaten < 164:
 		new_stream = preload("res://assets/sound/siren2.wav")
-	elif game_node.pellets_eaten < 224:
+	elif Globals.pellets_eaten < 224:
 		new_stream = preload("res://assets/sound/siren3.wav")
 	else:
 		new_stream = preload("res://assets/sound/siren4.wav")
