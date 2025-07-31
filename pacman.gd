@@ -3,7 +3,7 @@ extends Assets
 @onready var animation_node := $AnimatedSprite2D
 @onready var ghosts_node: Node2D = $"../Ghosts"
 
-var pacman_speed: float = 50.0
+var pacman_speed: float = 60.0
 
 var rotation_degree_from_direction = {
 	Vector2.RIGHT: 0,

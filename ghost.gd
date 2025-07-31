@@ -2,15 +2,15 @@ extends Assets
 
 @onready var animation_node: AnimatedSprite2D = $AnimatedSprite2D
 @onready var maze_node: Node2D = $"../../Maze"
-@onready var resurrect_timer_node: Timer = $ResurrectTimer
 @onready var pacman: CharacterBody2D = $"../../Pacman"
+@onready var game_node: Node2D = $"../.."
 
 
-const DEFAULT_GHOST_SPEED := 40.0
+const DEFAULT_GHOST_SPEED := 45.0
 
 @export var color: String # red, orange, pink, cyan
 @export var ghost_speed := DEFAULT_GHOST_SPEED
-@export var ghost_spawn_speed := 25.0
+@export var ghost_spawn_speed := 30.0
 @export var did_spawned := false
 
 var pixel_last_direction_change := Vector2(0, 0)
@@ -36,6 +36,7 @@ func enter_cruise_elory(level: int):
 	if is_frightened == false:
 		adjust_animation()
 		if level == 0:
+			cruise_elory = false
 			ghost_speed = DEFAULT_GHOST_SPEED
 		elif level == 1:			
 			cruise_elory = true
@@ -45,35 +46,41 @@ func enter_cruise_elory(level: int):
 			ghost_speed = DEFAULT_GHOST_SPEED + 10
 	else:
 		ghost_speed = DEFAULT_GHOST_SPEED
-	
 
-func _on_resurrect_timer_timeout() -> void:
+func returned_ghost_house():
 	is_died = false
-	is_frightened = false
-	is_last_2_second = false
+	is_spawning = false
+	did_spawned = false
+	pixel_last_direction_change = Vector2(0, 0)
+	spawn_ghost()
 	adjust_animation()
-	animation_node.show()
+	game_node.check_cruise_elroy()
 
 func die():
 	is_died = true
-	adjust_animation()
-	position = Vector2(spawn_x, spawn_y)
-	resurrect_timer_node.start(2.0)
+	is_frightened = false
+	is_last_2_second = false
+	maze_node.open_ghost_gate(self)
+	enter_cruise_elory(0)
 
 func spawn_ghost():
 	is_spawning_just_started = true
 
 func adjust_animation(is_last_2_second := is_last_2_second, is_frightened := is_frightened, color := color, direction := direction):
-	if Globals.is_game_paused == false and Globals.is_game_ended == false and is_died == false:
+	var current_animation_name := animation_node.animation
+	if Globals.is_game_paused == false and Globals.is_game_ended == false:
 		animation_node.speed_scale = Globals.game_speed
-		if is_frightened == false and is_last_2_second == false:
-				animation_node.play(color + "_" + ("cruise_elroy_" if cruise_elory else "") + Globals.direction_string[direction if direction != Vector2.ZERO else Vector2.LEFT])
-		elif is_frightened == true and is_last_2_second == false:
-			animation_node.play("frightened")
-		elif is_frightened == true and is_last_2_second == true:
-			animation_node.play("frightened_blink")
-	elif is_died == true:
-		animation_node.hide()
+		if is_frightened == false and is_last_2_second == false and is_died == false:
+				animation_node.set_animation(color + "_" + ("cruise_elroy_" if cruise_elory else "") + Globals.direction_string[direction if direction != Vector2.ZERO else Vector2.LEFT])
+		elif is_frightened == true and is_last_2_second == false and is_died == false:
+			animation_node.set_animation("frightened")
+		elif is_frightened == true and is_last_2_second == true and is_died == false:
+			animation_node.set_animation("frightened_blink")
+		elif is_died == true:
+			animation_node.set_animation("eye_" + Globals.direction_string[direction if direction != Vector2.ZERO else Vector2.LEFT])
+		
+		if current_animation_name != animation_node.animation:
+			animation_node.play()
 	else:
 		animation_node.stop()
 
@@ -106,14 +113,15 @@ func change_direction(next_direction := next_direction):
 	pixel_last_direction_change = position
 
 func _physics_process(delta: float) -> void:
-	if Globals.is_game_paused == false and Globals.is_game_ended == false and is_died == false:
+	if Globals.is_game_paused == false and Globals.is_game_ended == false:
 		if is_spawning_just_started == true:
 			maze_node.open_ghost_gate(self)
 			is_spawning = true
 			is_spawning_just_started = false
 		
 		elif is_spawning_just_ended == true:
-			maze_node.close_ghost_gate()
+			zero_index = 0
+			maze_node.close_ghost_gate(self)
 			is_spawning = false
 			is_spawning_just_ended = false
 			did_spawned = true
@@ -124,13 +132,13 @@ func _physics_process(delta: float) -> void:
 					direction = Vector2.LEFT
 				elif position.x < spawn_x:
 					direction = Vector2.RIGHT
-				position.x = move_toward(position.x, spawn_x, ghost_spawn_speed * Globals.game_speed * delta)
+				position.x = move_toward(position.x, spawn_x, ghost_spawn_speed * delta)
 			elif position.y != spawn_y:
 				if position.y > spawn_y:
 					direction = Vector2.UP
 				elif position.y < spawn_y:
 					direction = Vector2.DOWN
-				position.y = move_toward(position.y, spawn_y, ghost_spawn_speed * Globals.game_speed * delta)
+				position.y = move_toward(position.y, spawn_y, ghost_spawn_speed * delta)
 			else:
 				is_spawning_just_ended = true
 			
@@ -146,9 +154,11 @@ func _physics_process(delta: float) -> void:
 			var flag := false
 			
 			if possible.size() > 1 and is_frightened == false:
-				target = set_target()
+				target = get_target()
 				if target != Vector2.ZERO:
-						flag = find_best_way(position, target, possible)
+					flag = find_best_way(position, target, possible)
+					#if is_died == true:
+						#print("Position: " + str(position) + " Target: " + str(target))
 			if flag == true:
 				#print(Globals.direction_string[next_direction])
 				pass
@@ -159,10 +169,10 @@ func _physics_process(delta: float) -> void:
 			
 			if velocity == Vector2.ZERO: # sıkışmaması için
 				zero_index += 1
-				if zero_index >= 3:
+				if zero_index >= 15:
 					zero_index = 0
 					next_direction = Globals.get_reverse_direction(direction)
-					change_direction()
+					pixel_last_direction_change = Vector2(0, 0)
 			
 			
 			if next_direction != direction and (abs(position.x - pixel_last_direction_change.x) > 4 or abs(position.y - pixel_last_direction_change.y) > 4):
@@ -176,6 +186,8 @@ func _physics_process(delta: float) -> void:
 					temp_speed /= 2.5 # tunnel speed
 				if is_frightened == true:
 					temp_speed /= 2.0 # frighen speed
+				if is_died == true:
+					temp_speed *= 2.0
 				set_asset_velocity(direction, temp_speed)
 			else:
 				velocity = Vector2.ZERO
@@ -190,29 +202,32 @@ func _physics_process(delta: float) -> void:
 	elif Globals.is_game_paused == true or Globals.is_game_ended == true:
 		pass
 
-func set_target() -> Vector2:
+func get_target() -> Vector2:
 	var taget := Vector2.ZERO
-	if chase == false and scatter == true:
+	if is_died == true:
+		target = Globals.GHOST_HOUSE_POSITION
+	elif chase == false and scatter == true:
 		target = maze_node.get_node("Patrol/" + name).position
-	match name:
-		"Shadow": # red
-			if chase == true and scatter == false:
-				target = pacman.get_local_position()
-		"Speedy": # pink
-			if chase == true and scatter == false: # 4 block ahead
-				target = pacman.get_local_position() + pacman.direction * 32
-		"Bashful": # cyan
-			if chase == true and scatter == false: # 2
-				var blinky_pos: Vector2 = $"../Shadow".position
-				var pacman_pos: Vector2 = pacman.get_local_position()
-				target = 2 * (pacman_pos + pacman.direction * 16 - blinky_pos) + blinky_pos
-		"Pokey": # orange
-			if chase == true and scatter == false: # target pacman until distance is longer than 8 block
-				var pacman_pos: Vector2 = pacman.get_local_position()
-				if abs(position.x - pacman_pos.x) + abs(position.y - pacman_pos.y) > 64: # 8
+	elif chase == true and scatter == false:
+		match name:
+			"Shadow": # red
+				if chase == true and scatter == false:
 					target = pacman.get_local_position()
-				else: # target left-bottom corner
-					target = maze_node.get_node("Patrol/" + name).position
+			"Speedy": # pink
+				if chase == true and scatter == false: # 4 block ahead
+					target = pacman.get_local_position() + pacman.direction * 32
+			"Bashful": # cyan
+				if chase == true and scatter == false: # 2
+					var blinky_pos: Vector2 = $"../Shadow".position
+					var pacman_pos: Vector2 = pacman.get_local_position()
+					target = 2 * (pacman_pos + pacman.direction * 16 - blinky_pos) + blinky_pos
+			"Pokey": # orange
+				if chase == true and scatter == false: # target pacman until distance is longer than 8 block
+					var pacman_pos: Vector2 = pacman.get_local_position()
+					if abs(position.x - pacman_pos.x) + abs(position.y - pacman_pos.y) > 64: # 8
+						target = pacman.get_local_position()
+					else: # target left-bottom corner
+						target = maze_node.get_node("Patrol/" + name).position
 	return target
 		
 

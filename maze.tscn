@@ -1,10 +1,13 @@
-[gd_scene load_steps=4 format=3 uid="uid://cv6fv0t3bd18v"]
+[gd_scene load_steps=5 format=3 uid="uid://cv6fv0t3bd18v"]
 
 [ext_resource type="Texture2D" uid="uid://bcgqmaioxxdq6" path="res://assets/maze.png" id="1_dj01w"]
 [ext_resource type="Script" uid="uid://dm3ogg1xhdmdj" path="res://maze.gd" id="1_h41xc"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dj01w"]
 size = Vector2(44, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_h41xc"]
+size = Vector2(6, 6)
 
 [node name="Maze" type="Node2D"]
 script = ExtResource("1_h41xc")
@@ -115,11 +118,19 @@ collision_mask = 16777215
 shape = SubResource("RectangleShape2D_dj01w")
 
 [node name="GhostGate" type="StaticBody2D" parent="."]
-collision_layer = 16777215
-collision_mask = 0
+collision_layer = 16777183
+collision_mask = 65535
 
 [node name="GhostGate" type="CollisionPolygon2D" parent="GhostGate"]
 polygon = PackedVector2Array(-8, -24, 8, -24, 8, -20, -8, -20)
+
+[node name="GhostHouse" type="Area2D" parent="."]
+collision_layer = 65535
+collision_mask = 65535
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GhostHouse"]
+position = Vector2(0, -8)
+shape = SubResource("RectangleShape2D_h41xc")
 
 [node name="Patrol" type="Node2D" parent="."]
 position = Vector2(-112, -124)
@@ -142,3 +153,4 @@ position = Vector2(12, 224)
 [connection signal="body_entered" from="WarpTunnelLeft" to="." method="_on_warp_tunnel_body_entered"]
 [connection signal="body_exited" from="WarpTunnelLeft" to="." method="_on_warp_tunnel_body_exited"]
 [connection signal="body_entered" from="WarpTunnelLeftEnd" to="." method="_on_warp_tunnel_left_end_body_entered"]
+[connection signal="body_entered" from="GhostHouse" to="." method="_on_ghost_house_body_entered"]

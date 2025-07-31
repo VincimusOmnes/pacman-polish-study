@@ -4,27 +4,23 @@ class_name Fruit
 
 @onready var sprite_2d_node: Sprite2D = $Sprite2D
 @onready var timer_node: Timer = $Timer
+@onready var game_node: Node2D = $".."
 
 
-const fruit_score := [100, 300, 500, 700, 1000, 2000, 3000, 5000]
-const fruit_sprite := [
-	preload("res://assets/fruit_items/cherry.png"),
-	preload("res://assets/fruit_items/strawberry.png"),
-	preload("res://assets/fruit_items/orange.png"),
-	preload("res://assets/fruit_items/apple.png"),
-	preload("res://assets/fruit_items/melon.png"),
-	preload("res://assets/fruit_items/galaxian.png"),
-	preload("res://assets/fruit_items/bell.png"),
-	preload("res://assets/fruit_items/key.png"),
-]
+
 
 var index: int
 
-func _init(index: int = 0) -> void:
-	if index < fruit_sprite.size():
+func _ready() -> void:
+	sprite_2d_node.texture = Globals.fruit_sprite[index]
+	timer_node.start(10.0)
+
+func set_fruit_index(index: int = 0) -> void:
+	if index < Globals.fruit_sprite.size():
+		print("Fruit appeared")
+		print(index)
 		self.index = index
-		sprite_2d_node.texture = fruit_sprite[index]
-		timer_node.start(10.0)
+
 
 
 func _on_timer_timeout() -> void:
@@ -32,5 +28,8 @@ func _on_timer_timeout() -> void:
 
 
 func _on_body_entered(body: Node2D) -> void:
-	
-	queue_free()
+	if body.name == "Pacman":
+		game_node.add_score(Globals.fruit_score[index])
+		Globals.last_fruit_eaten.append(index)
+		game_node.draw_last_eaten_fruits()
+		queue_free()

@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://dfuxcfhse4nt3"]
+[gd_scene load_steps=12 format=3 uid="uid://dfuxcfhse4nt3"]
 
 [ext_resource type="PackedScene" uid="uid://cv6fv0t3bd18v" path="res://maze.tscn" id="1_e2o6t"]
 [ext_resource type="Script" uid="uid://kmcywng375dq" path="res://game.gd" id="1_feb5d"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://dig826tjdosh7" path="res://ghost.tscn" id="4_ryrav"]
 [ext_resource type="PackedScene" uid="uid://cgum8lgecfhw4" path="res://power_pellet.tscn" id="5_7jktm"]
 [ext_resource type="AudioStream" uid="uid://d15ov8ilhi4es" path="res://assets/sound/start.wav" id="7_j5wjh"]
+[ext_resource type="Script" uid="uid://dugv77jntubcd" path="res://score.gd" id="7_mfdv2"]
 [ext_resource type="Script" uid="uid://djr1oe3wfw7tf" path="res://sound.gd" id="7_vef74"]
 [ext_resource type="Script" uid="uid://lgkrnpmky646" path="res://uicontroller.gd" id="9_hve3p"]
 [ext_resource type="Texture2D" uid="uid://cl48og2wkdx5m" path="res://assets/arrow.png" id="10_mfdv2"]
@@ -757,7 +758,7 @@ position = Vector2(11, 188)
 
 [node name="Pacman" parent="." instance=ExtResource("2_feb5d")]
 position = Vector2(202, 228)
-collision_mask = 32
+collision_mask = 32800
 
 [node name="Ghosts" type="Node2D" parent="."]
 position = Vector2(90, 40)
@@ -765,7 +766,7 @@ position = Vector2(90, 40)
 [node name="Shadow" parent="Ghosts" instance=ExtResource("4_ryrav")]
 position = Vector2(111, 92)
 collision_layer = 2
-collision_mask = 32
+collision_mask = 16416
 color = "red"
 did_spawned = true
 direction = Vector2(-1, 0)
@@ -773,21 +774,21 @@ direction = Vector2(-1, 0)
 [node name="Speedy" parent="Ghosts" instance=ExtResource("4_ryrav")]
 position = Vector2(112, 115)
 collision_layer = 4
-collision_mask = 32
+collision_mask = 8224
 color = "pink"
 direction = Vector2(0, -1)
 
 [node name="Bashful" parent="Ghosts" instance=ExtResource("4_ryrav")]
 position = Vector2(97, 115)
 collision_layer = 8
-collision_mask = 32
+collision_mask = 4128
 color = "cyan"
 direction = Vector2(0, 1)
 
 [node name="Pokey" parent="Ghosts" instance=ExtResource("4_ryrav")]
 position = Vector2(127, 115)
 collision_layer = 16
-collision_mask = 32
+collision_mask = 2080
 color = "orange"
 direction = Vector2(0, -1)
 
@@ -798,8 +799,22 @@ zoom = Vector2(2, 2)
 [node name="ExtraLifes" type="HFlowContainer" parent="."]
 offset_left = 92.0
 offset_top = 291.0
-offset_right = 200.0
-offset_bottom = 304.0
+offset_right = 176.0
+offset_bottom = 312.0
+
+[node name="LastEatenFruits" type="HFlowContainer" parent="."]
+offset_left = 152.0
+offset_top = 291.0
+offset_right = 312.0
+offset_bottom = 296.0
+alignment = 2
+
+[node name="Score" type="VFlowContainer" parent="."]
+offset_left = 386.0
+offset_top = 95.0
+offset_right = 386.0
+offset_bottom = 95.0
+script = ExtResource("7_mfdv2")
 
 [node name="FrightenTimer" type="Timer" parent="."]
 one_shot = true

@@ -6,6 +6,9 @@ extends Node2D
 @onready var ghost_mode_cycle_node: Timer = $GhostModeCycle
 @onready var ghosts_node: Node2D = $Ghosts
 @onready var extra_lifes_node: Container = $ExtraLifes
+@onready var last_eaten_fruits_node: HFlowContainer = $LastEatenFruits
+@onready var score_node: VFlowContainer = $Score
+
 
 @onready var pacman_node: CharacterBody2D = $Pacman
 @onready var shadow_node: CharacterBody2D = $Ghosts/Shadow
@@ -40,7 +43,7 @@ func reset_game_variables():
 	Globals.extra_life = 2
 	Globals.pellets_eaten_string.clear()
 	Globals.pellets_eaten = 0
-	
+	Globals.last_fruit_eaten.clear()
 
 func check_game_over():
 	if Globals.extra_life < 1:
@@ -48,6 +51,7 @@ func check_game_over():
 
 func eat_pellet():
 	Globals.pellets_eaten += 1
+	check_fruit_appear()
 	check_cruise_elroy()
 
 func add_extra_life():
@@ -55,9 +59,10 @@ func add_extra_life():
 	draw_extra_life_icon()
 
 func add_score(value: int):
+	Globals.score += value
+	score_node.update_score(Globals.score)
 	if Globals.score / 10000 == (Globals.score-value) / 10000 + 1:
 		add_extra_life()
-	Globals.score += value
 
 func start_game():
 	Globals.is_game_paused = false
@@ -73,6 +78,17 @@ func pause_game():
 
 func resume_game():
 	ghost_mode_cycle_node.paused = false
+
+func check_fruit_appear():
+	if Globals.pellets_eaten == Globals.first_fruit_pellet or Globals.pellets_eaten == Globals.second_fruit_pellet: # first:
+		var fruit := preload("res://fruit.tscn").instantiate()
+		if Globals.game_level <= Globals.fruit_index_level.size():
+			fruit.set_fruit_index(Globals.fruit_index_level[Globals.game_level-1])
+		else:
+			fruit.set_fruit_index(Globals.fruit_index_level[-1]+1)
+		call_deferred("add_child", fruit)
+		fruit.position = Globals.fruit_position
+		
 
 func check_cruise_elroy():
 	if Globals.pellets_eaten >= 230:
@@ -113,8 +129,9 @@ func _on_frighten_timer_timeout() -> void:
 
 func _on_blink_timer_timeout() -> void:
 	for child in ghosts_node.get_children():
-		child.is_last_2_second = true
-		child.adjust_animation()
+		if child.is_frightened == true:
+			child.is_last_2_second = true
+			child.adjust_animation()
 
 func frighten_ghosts():
 	var frighten_time_array := [6.0, 5.0, 4.0, 3.0, 2.0, 5.0, 2.0, 2.0, 1.0, 1.0, 1.0, 1.0, 1.0]
@@ -158,7 +175,8 @@ func get_pacman_overlap() -> Array[CharacterBody2D]:
 	return bodies
 
 func _ready() -> void:
-	Globals.game_speed = 1.0 + float(Globals.game_level-1) / 10
+	score_node.update_score(Globals.score)
+	Globals.game_speed = min(1.0 + float(Globals.game_level-1) / 10, 2.0)
 	#print("Game speed: " + str(Globals.game_speed))
 	if Globals.pellets_eaten_string.size() > 0:
 		for child in pellets_node.get_children():
@@ -174,6 +192,7 @@ func _ready() -> void:
 	sounds_node.play_start_sound()
 	blink_power_pellets()
 	draw_extra_life_icon()
+	draw_last_eaten_fruits()
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed:
@@ -185,13 +204,13 @@ func _input(event: InputEvent) -> void:
 		elif event.keycode == KEY_D:
 			for ghost in ghosts_node.get_children():
 				if ghost.is_frightened == true:
-					print(ghost.name + " is in FRIGHTEN mode")
+					print(ghost.name + " is in FRIGHTEN mode, Target is: " + str(ghost.get_target()), " Possible Directions: " + str(ghost.get_ghost_possible_direction()))
 				elif ghost.cruise_elory == true:
-					print(ghost.name + " is in CRUSE ELORY mode")
+					print(ghost.name + " is in CRUSE ELORY mode, Target is: " + str(ghost.get_target()), " Possible Directions: " + str(ghost.get_ghost_possible_direction()))
 				elif ghost.chase == true and ghost.scatter == false:
-					print(ghost.name + " is in CHASE mode")
+					print(ghost.name + " is in CHASE mode, Target is: " + str(ghost.get_target()), " Possible Directions: " + str(ghost.get_ghost_possible_direction()))
 				elif ghost.chase == false and ghost.scatter == true:
-					print(ghost.name + " is in SCATTER mode")
+					print(ghost.name + " is in SCATTER mode, Target is: " + str(ghost.get_target()), " Possible Directions: " + str(ghost.get_ghost_possible_direction()))
 		elif event.keycode == KEY_S:
 			print("Score is: " + str(Globals.score))
 		elif event.keycode == KEY_C:
@@ -220,6 +239,11 @@ func _process(delta: float) -> void:
 							sounds_node.play_death_sound()
 							check_game_over()
 					elif ghost.is_frightened == true: # yedin
+						var score_add := 200
+						for child in ghosts_node.get_children():
+							if child.is_frightened == false:
+								score_add *= 2
+						add_score(score_add)
 						ghost.die()
 		if Globals.pellets_eaten == 244:
 			level_ended()
@@ -232,3 +256,14 @@ func draw_extra_life_icon():
 		texture_node.name = "extra_life_" + str(i+1)
 		texture_node.texture = preload("res://assets/extra_life.png")
 		extra_lifes_node.add_child(texture_node)
+
+func draw_last_eaten_fruits():
+	for child in last_eaten_fruits_node.get_children():
+		child.queue_free()
+	for i in range(1, 8):
+		if Globals.last_fruit_eaten.size() >= i:
+			var texture_node := TextureRect.new()
+			texture_node.name = "last_eaten_fruit_" + str(i)
+			print(texture_node.name)
+			texture_node.texture = Globals.fruit_sprite[Globals.last_fruit_eaten[-i]]
+			last_eaten_fruits_node.add_child(texture_node)

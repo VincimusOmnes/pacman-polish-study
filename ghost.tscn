@@ -1,4 +1,4 @@
-[gd_scene load_steps=48 format=3 uid="uid://dig826tjdosh7"]
+[gd_scene load_steps=52 format=3 uid="uid://dig826tjdosh7"]
 
 [ext_resource type="Texture2D" uid="uid://bbwe7d0anuinu" path="res://assets/ghosts/cyan/down1.png" id="1_ddsli"]
 [ext_resource type="Script" uid="uid://dpha0xt6eqjmi" path="res://ghost.gd" id="1_i8mp4"]
@@ -11,9 +11,13 @@
 [ext_resource type="Texture2D" uid="uid://dsi7jhk1mti5t" path="res://assets/ghosts/cyan/up2.png" id="8_ut5wx"]
 [ext_resource type="Texture2D" uid="uid://2818dolbh7j1" path="res://assets/ghosts/frightened/normal1.png" id="9_60b4m"]
 [ext_resource type="Texture2D" uid="uid://8csmrf5gg3my" path="res://assets/ghosts/frightened/normal2.png" id="10_nb7tm"]
+[ext_resource type="Texture2D" uid="uid://c7en8qakdwi4x" path="res://assets/ghosts/eye/down.png" id="10_p68em"]
+[ext_resource type="Texture2D" uid="uid://dk28s5qrtajdf" path="res://assets/ghosts/eye/left.png" id="11_mjrtr"]
 [ext_resource type="Texture2D" uid="uid://bl566kllji6pr" path="res://assets/ghosts/frightened/blink1.png" id="11_wud3o"]
 [ext_resource type="Texture2D" uid="uid://bj4hdgqkkywd1" path="res://assets/ghosts/frightened/blink2.png" id="12_42sjv"]
+[ext_resource type="Texture2D" uid="uid://ckhxcird4ynuo" path="res://assets/ghosts/eye/right.png" id="12_pjrnn"]
 [ext_resource type="Texture2D" uid="uid://dxn87m2kb6x7a" path="res://assets/ghosts/orange/down1.png" id="13_1bxwl"]
+[ext_resource type="Texture2D" uid="uid://dmuu47h3tuxwx" path="res://assets/ghosts/eye/up.png" id="13_3urrm"]
 [ext_resource type="Texture2D" uid="uid://ckbnpipqf71qv" path="res://assets/ghosts/orange/down2.png" id="14_p68em"]
 [ext_resource type="Texture2D" uid="uid://dt18pkj2p1mwv" path="res://assets/ghosts/orange/left1.png" id="15_mjrtr"]
 [ext_resource type="Texture2D" uid="uid://dliuwyefydxc3" path="res://assets/ghosts/orange/left2.png" id="16_pjrnn"]
@@ -90,6 +94,38 @@ animations = [{
 }],
 "loop": true,
 "name": &"cyan_up",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("10_p68em")
+}],
+"loop": true,
+"name": &"eye_down",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("11_mjrtr")
+}],
+"loop": true,
+"name": &"eye_left",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("12_pjrnn")
+}],
+"loop": true,
+"name": &"eye_right",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("13_3urrm")
+}],
+"loop": true,
+"name": &"eye_up",
 "speed": 8.0
 }, {
 "frames": [{
@@ -317,12 +353,7 @@ script = ExtResource("1_i8mp4")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_u4bdu")
-animation = &"red_cruise_elroy_down"
+animation = &"eye_down"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_wmca4")
-
-[node name="ResurrectTimer" type="Timer" parent="."]
-one_shot = true
-
-[connection signal="timeout" from="ResurrectTimer" to="." method="_on_resurrect_timer_timeout"]

@@ -2,6 +2,9 @@ extends Node
 
 var cheat_activated := false
 
+const GHOST_HOUSE_POSITION = Vector2(112, 115)
+const GHOSTS_NAME := ["Shadow", "Speedy", "Bashful", "Pokey"]
+
 var game_level: int = 1
 var score: int = 0
 var game_speed := 1.0 + float(game_level-1) / 10
@@ -21,12 +24,25 @@ var direction_string = {
 	Vector2.DOWN: "down"
 }
 
-const first_item_pellet := 70
-const second_item_pellet := 170
+const first_fruit_pellet := 5
+const second_fruit_pellet := 170
 
+const fruit_position := Vector2(202, 180)
 
+const fruit_score := [100, 300, 500, 700, 1000, 2000, 3000, 5000]
+const fruit_sprite := [
+	preload("res://assets/fruit_items/cherry.png"),
+	preload("res://assets/fruit_items/strawberry.png"),
+	preload("res://assets/fruit_items/orange.png"),
+	preload("res://assets/fruit_items/apple.png"),
+	preload("res://assets/fruit_items/melon.png"),
+	preload("res://assets/fruit_items/galaxian.png"),
+	preload("res://assets/fruit_items/bell.png"),
+	preload("res://assets/fruit_items/key.png"),
+]
 
-const item_index_level := [0, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6] # access [game_level-1] and if level is more than 13 always key
+const fruit_index_level := [0, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6] # access [game_level-1] and if level is more than 13 always key
+var last_fruit_eaten: Array[int] = []
 
 func get_reverse_direction(direction: Vector2) -> Vector2:
 	match direction:
