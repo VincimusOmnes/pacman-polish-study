@@ -239,11 +239,9 @@ func _process(delta: float) -> void:
 							sounds_node.play_death_sound()
 							check_game_over()
 					elif ghost.is_frightened == true: # yedin
-						var score_add := 200
-						for child in ghosts_node.get_children():
-							if child.is_frightened == false:
-								score_add *= 2
+						var score_add := 200 * pow(2, Globals.ghost_eaten_since_last_frighten)
 						add_score(score_add)
+						Globals.ghost_eaten_since_last_frighten += 1
 						ghost.die()
 		if Globals.pellets_eaten == 244:
 			level_ended()

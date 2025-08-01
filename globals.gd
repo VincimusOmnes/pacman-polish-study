@@ -24,7 +24,7 @@ var direction_string = {
 	Vector2.DOWN: "down"
 }
 
-const first_fruit_pellet := 5
+const first_fruit_pellet := 70
 const second_fruit_pellet := 170
 
 const fruit_position := Vector2(202, 180)
@@ -43,6 +43,8 @@ const fruit_sprite := [
 
 const fruit_index_level := [0, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6] # access [game_level-1] and if level is more than 13 always key
 var last_fruit_eaten: Array[int] = []
+
+var ghost_eaten_since_last_frighten := 0
 
 func get_reverse_direction(direction: Vector2) -> Vector2:
 	match direction:
