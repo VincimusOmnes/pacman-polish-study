@@ -5,9 +5,9 @@ extends Node2D
 @onready var frighten_timer_node: Timer = $FrightenTimer
 @onready var ghost_mode_cycle_node: Timer = $GhostModeCycle
 @onready var ghosts_node: Node2D = $Ghosts
-@onready var extra_lifes_node: Container = $ExtraLifes
-@onready var last_eaten_fruits_node: HFlowContainer = $LastEatenFruits
-@onready var score_node: VFlowContainer = $Score
+@onready var extra_lifes_node: Container = $UI/ExtraLifes
+@onready var last_eaten_fruits_node: HFlowContainer = $UI/LastEatenFruits
+@onready var ui_node: Control = $UI
 
 
 @onready var pacman_node: CharacterBody2D = $Pacman
@@ -60,7 +60,7 @@ func add_extra_life():
 
 func add_score(value: int):
 	Globals.score += value
-	score_node.update_score(Globals.score)
+	ui_node.update_score(Globals.score)
 	if Globals.score / 10000 == (Globals.score-value) / 10000 + 1:
 		add_extra_life()
 
@@ -120,7 +120,6 @@ func _on_ghost_mode_cycle_timeout() -> void:
 			ghost.chase = true
 
 func _on_frighten_timer_timeout() -> void:
-	ghost_mode_cycle_node.paused = false
 	for child in ghosts_node.get_children():
 		child.is_frightened = false
 		child.is_last_2_second = false
@@ -136,15 +135,15 @@ func _on_blink_timer_timeout() -> void:
 func frighten_ghosts():
 	var frighten_time_array := [6.0, 5.0, 4.0, 3.0, 2.0, 5.0, 2.0, 2.0, 1.0, 1.0, 1.0, 1.0, 1.0]
 	if frighten_time_array.size() > Globals.game_level-1: # after level 14, ghost will not afraid
-		ghost_mode_cycle_node.paused = true
 		frighten_timer_node.start(frighten_time_array[Globals.game_level-1])
 		blink_timer_node.start(max(frighten_time_array[Globals.game_level-1] -2, 0.001))
 	for child in ghosts_node.get_children():
-		if frighten_time_array.size() > Globals.game_level-1: # after level 14, ghost will not afraid
-			child.is_frightened = true
-			child.is_last_2_second = false
-		child.change_direction(Globals.get_reverse_direction(child.direction))
-		child.adjust_animation()
+		if child.is_died == false:
+			if frighten_time_array.size() > Globals.game_level-1: # after level 14, ghost will not afraid
+				child.is_frightened = true
+				child.is_last_2_second = false
+			child.change_direction(Globals.get_reverse_direction(child.direction))
+			child.adjust_animation()
 
 func blink_power_pellets():
 	for child in power_pellets_node.get_children():
@@ -170,12 +169,13 @@ func get_pacman_overlap() -> Array[CharacterBody2D]:
 	var bodies: Array[CharacterBody2D] = []
 	for ghost in ghosts_node.get_children():
 		if pacman_node.is_overlapping_with(ghost):
-			if Globals.cheat_activated == false:
+			if Globals.cheat_activated == false and Globals.is_game_ended == false:
 				bodies.append(ghost)
 	return bodies
 
 func _ready() -> void:
-	score_node.update_score(Globals.score)
+	ui_node.update_level(Globals.game_level)
+	ui_node.update_score(Globals.score)
 	Globals.game_speed = min(1.0 + float(Globals.game_level-1) / 10, 2.0)
 	#print("Game speed: " + str(Globals.game_speed))
 	if Globals.pellets_eaten_string.size() > 0:

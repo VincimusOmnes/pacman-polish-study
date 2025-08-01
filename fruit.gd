@@ -17,8 +17,6 @@ func _ready() -> void:
 
 func set_fruit_index(index: int = 0) -> void:
 	if index < Globals.fruit_sprite.size():
-		print("Fruit appeared")
-		print(index)
 		self.index = index
 
 
