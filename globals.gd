@@ -1,5 +1,6 @@
 extends Node
 
+var debug_mode := false
 var cheat_activated := false
 
 const GHOST_HOUSE_POSITION = Vector2(112, 115)

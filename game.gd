@@ -19,6 +19,9 @@ extends Node2D
 @onready var pellets_node: Node2D = $Pellets
 @onready var sounds_node: Node = $Sounds
 
+@onready var debug_arrows_node: Node2D = $DebugArrows
+
+
 var ghost_mode_index := 0
 var ghost_mode_timer := [7.0, 20.0, 7.0, 20.0, 5.0]
 var level_end := false
@@ -162,8 +165,6 @@ func level_ended():
 	Globals.pellets_eaten_string.clear()
 	await maze_node.blink_maze()
 	reborn(false)
-	
-	
 
 func get_pacman_overlap() -> Array[CharacterBody2D]:
 	var bodies: Array[CharacterBody2D] = []
@@ -201,7 +202,7 @@ func _input(event: InputEvent) -> void:
 				reborn(true)
 		elif event.keycode == KEY_ESCAPE:
 			pause_game()
-		elif event.keycode == KEY_D:
+		elif event.keycode == KEY_G:
 			for ghost in ghosts_node.get_children():
 				if ghost.is_frightened == true:
 					print(ghost.name + " is in FRIGHTEN mode, Target is: " + str(ghost.get_target()), " Possible Directions: " + str(ghost.get_ghost_possible_direction()))
@@ -224,10 +225,12 @@ func _input(event: InputEvent) -> void:
 			if Globals.cheat_activated == true:
 				print("frighten ghost")
 				frighten_ghosts()
+		elif event.keycode == KEY_D:
+			Globals.debug_mode = !Globals.debug_mode
+			print("Debug mode " + ("activated" if Globals.debug_mode else "deactivated"))
 	
 
 func _process(delta: float) -> void:
-	if Globals.is_game_ended == false:
 		var bodies := get_pacman_overlap()
 		if bodies.size() > 0:
 			for ghost in bodies:

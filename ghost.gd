@@ -9,12 +9,13 @@ extends Assets
 const DEFAULT_GHOST_SPEED := 45.0
 
 @export var color: String # red, orange, pink, cyan
+@export var _color: Color
 @export var ghost_speed := DEFAULT_GHOST_SPEED
 @export var ghost_spawn_speed := 30.0
 @export var did_spawned := false
 
-var pixel_last_direction_change := Vector2(0, 0)
-var target := Vector2(0, 0)
+var pixel_last_direction_change := Vector2.ZERO
+var target := Vector2.ZERO
 
 var scatter := true
 var chase := false

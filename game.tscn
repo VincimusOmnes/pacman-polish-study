@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://dfuxcfhse4nt3"]
+[gd_scene load_steps=15 format=3 uid="uid://dfuxcfhse4nt3"]
 
 [ext_resource type="PackedScene" uid="uid://cv6fv0t3bd18v" path="res://maze.tscn" id="1_e2o6t"]
 [ext_resource type="Script" uid="uid://kmcywng375dq" path="res://game.gd" id="1_feb5d"]
@@ -13,6 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://kalav1jieg66" path="res://assets/ui/level.png" id="9_lc2xo"]
 [ext_resource type="Texture2D" uid="uid://cl48og2wkdx5m" path="res://assets/arrow.png" id="10_mfdv2"]
 [ext_resource type="Texture2D" uid="uid://dxfaig3v147jl" path="res://assets/ui/score.png" id="12_iotsf"]
+[ext_resource type="Script" uid="uid://tkfdntcxvwdj" path="res://debug_arrows.gd" id="14_215e1"]
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_feb5d")
@@ -770,6 +771,7 @@ position = Vector2(111, 92)
 collision_layer = 2
 collision_mask = 16416
 color = "red"
+_color = Color(1, 0, 0, 1)
 did_spawned = true
 direction = Vector2(-1, 0)
 
@@ -778,6 +780,7 @@ position = Vector2(112, 115)
 collision_layer = 4
 collision_mask = 8224
 color = "pink"
+_color = Color(1, 0.397415, 0.828109, 1)
 direction = Vector2(0, -1)
 
 [node name="Bashful" parent="Ghosts" instance=ExtResource("4_ryrav")]
@@ -785,6 +788,7 @@ position = Vector2(97, 115)
 collision_layer = 8
 collision_mask = 4128
 color = "cyan"
+_color = Color(5.77569e-07, 0.794818, 0.868675, 1)
 direction = Vector2(0, 1)
 
 [node name="Pokey" parent="Ghosts" instance=ExtResource("4_ryrav")]
@@ -792,6 +796,7 @@ position = Vector2(127, 115)
 collision_layer = 16
 collision_mask = 2080
 color = "orange"
+_color = Color(1, 0.678159, 0.430577, 1)
 direction = Vector2(0, -1)
 
 [node name="Camera2D" type="Camera2D" parent="."]
@@ -912,6 +917,10 @@ offset_right = 610.333
 offset_bottom = 358.333
 rotation = 1.5708
 texture_normal = ExtResource("10_mfdv2")
+
+[node name="DebugArrows" type="Node2D" parent="."]
+position = Vector2(90, 40)
+script = ExtResource("14_215e1")
 
 [connection signal="timeout" from="FrightenTimer" to="." method="_on_frighten_timer_timeout"]
 [connection signal="timeout" from="BlinkTimer" to="." method="_on_blink_timer_timeout"]
