@@ -268,3 +268,10 @@ func draw_last_eaten_fruits():
 			print(texture_node.name)
 			texture_node.texture = Globals.fruit_sprite[Globals.last_fruit_eaten[-i]]
 			last_eaten_fruits_node.add_child(texture_node)
+
+func check_any_ghost_died():
+	for ghost in ghosts_node.get_children():
+		if ghost.is_died == true:
+			return true
+	return false
+		

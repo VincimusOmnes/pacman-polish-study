@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://dfuxcfhse4nt3"]
+[gd_scene load_steps=14 format=3 uid="uid://dfuxcfhse4nt3"]
 
 [ext_resource type="PackedScene" uid="uid://cv6fv0t3bd18v" path="res://maze.tscn" id="1_e2o6t"]
 [ext_resource type="Script" uid="uid://kmcywng375dq" path="res://game.gd" id="1_feb5d"]
@@ -9,10 +9,9 @@
 [ext_resource type="AudioStream" uid="uid://d15ov8ilhi4es" path="res://assets/sound/start.wav" id="7_j5wjh"]
 [ext_resource type="Script" uid="uid://dugv77jntubcd" path="res://ui.gd" id="7_lc2xo"]
 [ext_resource type="Script" uid="uid://djr1oe3wfw7tf" path="res://sound.gd" id="7_vef74"]
-[ext_resource type="Script" uid="uid://lgkrnpmky646" path="res://uicontroller.gd" id="9_hve3p"]
 [ext_resource type="Texture2D" uid="uid://kalav1jieg66" path="res://assets/ui/level.png" id="9_lc2xo"]
-[ext_resource type="Texture2D" uid="uid://cl48og2wkdx5m" path="res://assets/arrow.png" id="10_mfdv2"]
 [ext_resource type="Texture2D" uid="uid://dxfaig3v147jl" path="res://assets/ui/score.png" id="12_iotsf"]
+[ext_resource type="AudioStream" uid="uid://b3kb22hbc5uuu" path="res://assets/sound/eat_fruit.wav" id="12_lc2xo"]
 [ext_resource type="Script" uid="uid://tkfdntcxvwdj" path="res://debug_arrows.gd" id="14_215e1"]
 
 [node name="Game" type="Node2D"]
@@ -881,42 +880,10 @@ volume_db = -10.0
 
 [node name="Siren" type="AudioStreamPlayer" parent="Sounds"]
 
-[node name="UIController" type="CanvasLayer" parent="."]
-layer = 2
-scale = Vector2(1.5, 1.5)
-transform = Transform2D(1.5, 0, 0, 1.5, 0, 0)
-script = ExtResource("9_hve3p")
+[node name="EatFruit" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource("12_lc2xo")
 
-[node name="Up" type="TextureButton" parent="UIController"]
-offset_left = 387.333
-offset_top = 239.333
-offset_right = 459.333
-offset_bottom = 311.333
-texture_normal = ExtResource("10_mfdv2")
-
-[node name="Down" type="TextureButton" parent="UIController"]
-offset_left = 451.333
-offset_top = 390.333
-offset_right = 523.333
-offset_bottom = 462.333
-rotation = -3.14159
-texture_normal = ExtResource("10_mfdv2")
-
-[node name="Left" type="TextureButton" parent="UIController"]
-offset_left = 303.333
-offset_top = 350.333
-offset_right = 375.333
-offset_bottom = 422.333
-rotation = -1.5708
-texture_normal = ExtResource("10_mfdv2")
-
-[node name="Right" type="TextureButton" parent="UIController"]
-offset_left = 538.333
-offset_top = 286.333
-offset_right = 610.333
-offset_bottom = 358.333
-rotation = 1.5708
-texture_normal = ExtResource("10_mfdv2")
+[node name="Eyes" type="AudioStreamPlayer" parent="Sounds"]
 
 [node name="DebugArrows" type="Node2D" parent="."]
 position = Vector2(90, 40)
@@ -926,7 +893,3 @@ script = ExtResource("14_215e1")
 [connection signal="timeout" from="BlinkTimer" to="." method="_on_blink_timer_timeout"]
 [connection signal="timeout" from="GhostModeCycle" to="." method="_on_ghost_mode_cycle_timeout"]
 [connection signal="finished" from="Sounds/StartAudio" to="Sounds" method="_on_begininng_audio_finished"]
-[connection signal="pressed" from="UIController/Up" to="UIController" method="_on_up_pressed"]
-[connection signal="pressed" from="UIController/Down" to="UIController" method="_on_down_pressed"]
-[connection signal="pressed" from="UIController/Left" to="UIController" method="_on_left_pressed"]
-[connection signal="pressed" from="UIController/Right" to="UIController" method="_on_right_pressed"]
