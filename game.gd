@@ -196,7 +196,10 @@ func _ready() -> void:
 	draw_last_eaten_fruits()
 
 func _input(event: InputEvent) -> void:
-	if event is InputEventKey and event.pressed:
+	if event is InputEventScreenTouch:
+		if Globals.is_game_ended == true and level_end == false:
+				reborn(true)
+	elif event is InputEventKey and event.pressed:
 		if event.keycode == KEY_ENTER:
 			if Globals.is_game_ended == true and level_end == false:
 				reborn(true)
