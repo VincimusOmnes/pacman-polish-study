@@ -106,4 +106,5 @@ func _process(delta: float) -> void:
 	
 
 func _ready() -> void:
+	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), -40)
 	pass

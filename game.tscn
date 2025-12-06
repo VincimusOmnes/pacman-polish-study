@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://dfuxcfhse4nt3"]
+[gd_scene load_steps=22 format=3 uid="uid://dfuxcfhse4nt3"]
 
 [ext_resource type="PackedScene" uid="uid://cv6fv0t3bd18v" path="res://maze.tscn" id="1_e2o6t"]
 [ext_resource type="Script" uid="uid://kmcywng375dq" path="res://game.gd" id="1_feb5d"]
@@ -6,13 +6,63 @@
 [ext_resource type="PackedScene" uid="uid://bydogw2u4ghma" path="res://pellet.tscn" id="4_fc0e3"]
 [ext_resource type="PackedScene" uid="uid://dig826tjdosh7" path="res://ghost.tscn" id="4_ryrav"]
 [ext_resource type="PackedScene" uid="uid://cgum8lgecfhw4" path="res://power_pellet.tscn" id="5_7jktm"]
+[ext_resource type="Script" uid="uid://dylbgeorixiag" path="res://camera_2d.gd" id="7_215e1"]
 [ext_resource type="AudioStream" uid="uid://d15ov8ilhi4es" path="res://assets/sound/start.wav" id="7_j5wjh"]
 [ext_resource type="Script" uid="uid://dugv77jntubcd" path="res://ui.gd" id="7_lc2xo"]
 [ext_resource type="Script" uid="uid://djr1oe3wfw7tf" path="res://sound.gd" id="7_vef74"]
+[ext_resource type="Script" uid="uid://bg3e4wx67roke" path="res://classes/Shake.gd" id="8_7sc4i"]
+[ext_resource type="Shader" uid="uid://bcv6bmn7khhop" path="res://shaders/shockwave.gdshader" id="9_80cx4"]
 [ext_resource type="Texture2D" uid="uid://kalav1jieg66" path="res://assets/ui/level.png" id="9_lc2xo"]
+[ext_resource type="Script" uid="uid://b4ofwhr1qt13p" path="res://Shockwave.gd" id="10_e8heu"]
 [ext_resource type="Texture2D" uid="uid://dxfaig3v147jl" path="res://assets/ui/score.png" id="12_iotsf"]
 [ext_resource type="AudioStream" uid="uid://b3kb22hbc5uuu" path="res://assets/sound/eat_fruit.wav" id="12_lc2xo"]
 [ext_resource type="Script" uid="uid://tkfdntcxvwdj" path="res://debug_arrows.gd" id="14_215e1"]
+
+[sub_resource type="Animation" id="Animation_7sc4i"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:zoom")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(2, 2)]
+}
+
+[sub_resource type="Animation" id="Animation_215e1"]
+resource_name = "slow_breathe_out"
+length = 1.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:zoom")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.2333333, 1.5),
+"transitions": PackedFloat32Array(0.19614626, 0.45062542, 0.09473246),
+"update": 0,
+"values": [Vector2(2, 2), Vector2(1.8, 1.8), Vector2(4, 4)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_80cx4"]
+_data = {
+&"RESET": SubResource("Animation_7sc4i"),
+&"slow_breathe_out": SubResource("Animation_215e1")
+}
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_e8heu"]
+shader = ExtResource("9_80cx4")
+shader_parameter/strength = 0.08
+shader_parameter/center = Vector2(0.5, 0.5)
+shader_parameter/radius = 0.25
+shader_parameter/aberration = 0.425
+shader_parameter/width = 0.04
+shader_parameter/feather = 0.135
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_feb5d")
@@ -799,8 +849,42 @@ _color = Color(1, 0.678159, 0.430577, 1)
 direction = Vector2(0, -1)
 
 [node name="Camera2D" type="Camera2D" parent="."]
+process_mode = 3
 position = Vector2(286, 166.095)
 zoom = Vector2(2, 2)
+script = ExtResource("7_215e1")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Camera2D"]
+process_mode = 3
+deterministic = true
+libraries = {
+&"": SubResource("AnimationLibrary_80cx4")
+}
+
+[node name="Shake" type="Node" parent="Camera2D"]
+script = ExtResource("8_7sc4i")
+shake_strength = 3.0
+shake_decay_rate = 20.0
+should_shake_offset = true
+metadata/_custom_type_script = "uid://bg3e4wx67roke"
+
+[node name="CanvasLayer" type="CanvasLayer" parent="Camera2D"]
+
+[node name="Shockwave" type="ColorRect" parent="Camera2D/CanvasLayer"]
+process_mode = 3
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 1.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("10_e8heu")
+shader_material = SubResource("ShaderMaterial_e8heu")
+radius_end = 1.0
+duration = 1.0
+metadata/_custom_type_script = "uid://b4ofwhr1qt13p"
 
 [node name="UI" type="Control" parent="."]
 layout_mode = 3
