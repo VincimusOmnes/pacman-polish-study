@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=3 uid="uid://dig826tjdosh7"]
+[gd_scene load_steps=54 format=3 uid="uid://dig826tjdosh7"]
 
 [ext_resource type="Texture2D" uid="uid://bbwe7d0anuinu" path="res://assets/ghosts/cyan/down1.png" id="1_ddsli"]
 [ext_resource type="Script" uid="uid://dpha0xt6eqjmi" path="res://ghost.gd" id="1_i8mp4"]
@@ -49,6 +49,8 @@
 [ext_resource type="Texture2D" uid="uid://c054gduig1ubc" path="res://assets/ghosts/red_cruise_elroy/up1.png" id="36_pjrnn"]
 [ext_resource type="Texture2D" uid="uid://bi7le7jt8gcuv" path="res://assets/ghosts/red/up2.png" id="36_u4moi"]
 [ext_resource type="Texture2D" uid="uid://bqiwvseyxo4uc" path="res://assets/ghosts/red_cruise_elroy/up2.png" id="37_3urrm"]
+[ext_resource type="Script" uid="uid://dfm3uw26mqudt" path="res://classes/OffScreenDirectionalIndicator.gd" id="50_mjrtr"]
+[ext_resource type="Texture2D" uid="uid://2q6p5yq8c14m" path="res://assets/enemy_indicator.png" id="51_pjrnn"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_u4bdu"]
 animations = [{
@@ -353,7 +355,28 @@ script = ExtResource("1_i8mp4")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_u4bdu")
-animation = &"eye_down"
+animation = &"cyan_left"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_wmca4")
+
+[node name="OffScreenDirectionalIndicator" type="VisibleOnScreenNotifier2D" parent="." node_paths=PackedStringArray("node_to_point", "icon")]
+rect = Rect2(-7, -7, 14, 14)
+script = ExtResource("50_mjrtr")
+node_to_point = NodePath("../Sprite2D")
+icon = NodePath("../Sprite2D/AnimatedSprite2D2")
+metadata/_custom_type_script = "uid://dfm3uw26mqudt"
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(0, 7)
+texture = ExtResource("51_pjrnn")
+centered = false
+offset = Vector2(0, -7)
+flip_h = true
+
+[node name="AnimatedSprite2D2" type="AnimatedSprite2D" parent="Sprite2D"]
+position = Vector2(8.5, 0.5)
+scale = Vector2(0.41, 0.41)
+sprite_frames = SubResource("SpriteFrames_u4bdu")
+animation = &"cyan_left"

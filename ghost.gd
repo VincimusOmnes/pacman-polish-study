@@ -1,6 +1,7 @@
 extends Assets
 
 @onready var animation_node: AnimatedSprite2D = $AnimatedSprite2D
+@onready var animation_copy: AnimatedSprite2D = $Sprite2D/AnimatedSprite2D2
 @onready var maze_node: Node2D = $"../../Maze"
 @onready var pacman: CharacterBody2D = $"../../Pacman"
 @onready var game_node: Node2D = $"../.."
@@ -71,19 +72,25 @@ func adjust_animation(is_last_2_second := is_last_2_second, is_frightened := is_
 	var current_animation_name := animation_node.animation
 	if Globals.is_game_paused == false and Globals.is_game_ended == false:
 		animation_node.speed_scale = Globals.game_speed
+		animation_copy.speed_scale = Globals.game_speed
 		if is_frightened == false and is_last_2_second == false and is_died == false:
 				animation_node.set_animation(color + "_" + ("cruise_elroy_" if cruise_elory else "") + Globals.direction_string[direction if direction != Vector2.ZERO else Vector2.LEFT])
+				animation_copy.set_animation(color + "_" + ("cruise_elroy_" if cruise_elory else "") + Globals.direction_string[direction if direction != Vector2.ZERO else Vector2.LEFT])
 		elif is_frightened == true and is_last_2_second == false and is_died == false:
 			animation_node.set_animation("frightened")
+			animation_copy.set_animation("frightened")
 		elif is_frightened == true and is_last_2_second == true and is_died == false:
 			animation_node.set_animation("frightened_blink")
+			animation_copy.set_animation("frightened_blink")
 		elif is_died == true:
 			animation_node.set_animation("eye_" + Globals.direction_string[direction if direction != Vector2.ZERO else Vector2.LEFT])
-		
+			animation_copy.set_animation("eye_" + Globals.direction_string[direction if direction != Vector2.ZERO else Vector2.LEFT])
 		if current_animation_name != animation_node.animation:
 			animation_node.play()
+			animation_copy.play()
 	else:
 		animation_node.stop()
+		animation_copy.stop()
 
 func get_ghost_possible_direction() -> Array[Vector2]:
 	var possible: Array[Vector2] = []
@@ -101,6 +108,8 @@ func get_ghost_possible_direction() -> Array[Vector2]:
 func _ready() -> void:
 	animation_node.play(color + "_" + Globals.direction_string[direction])
 	animation_node.stop()
+	animation_copy.play(color + "_" + Globals.direction_string[direction])
+	animation_copy.stop()
 	start_move(direction, ghost_speed)
 
 func _process(delta: float) -> void:

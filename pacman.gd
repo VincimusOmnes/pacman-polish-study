@@ -35,11 +35,12 @@ func rotate_animation(direction: Vector2):
 	animation_node.rotation_degrees = rotation_degree_from_direction[direction]
 
 func _ready() -> void:
+	PlayerManager.player_node = self
 	play_move_animation()
 	pause_animation()
 	start_move(Vector2.LEFT, pacman_speed)
 	rotate_animation(Vector2.LEFT)
-
+	
 func get_local_position():
 	return Vector2(position.x - ghosts_node.position.x, position.y - ghosts_node.position.y)
 
