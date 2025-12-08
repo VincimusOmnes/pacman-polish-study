@@ -12,9 +12,12 @@ completedColumns:
 ## Todo
 
 - [windup-momentum](tasks/windup-momentum.md)
-- [alternate-controls](tasks/alternate-controls.md)
-- [off-screen-enemy-indicators](tasks/off-screen-enemy-indicators.md)
+- [fisheye-on-the-zoom](tasks/fisheye-on-the-zoom.md)
 
 ## In Progress
 
+- [alternate-controls](tasks/alternate-controls.md)
+
 ## Done
+
+- [off-screen-enemy-indicators](tasks/off-screen-enemy-indicators.md)

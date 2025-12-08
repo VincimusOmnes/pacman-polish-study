@@ -12,6 +12,7 @@ var rotation_degree_from_direction = {
 	Vector2.UP: 270
 }
 
+
 func play_move_animation():
 	animation_node.sprite_frames.set_animation_loop("pacman_move", true)
 	animation_node.play("pacman_move")

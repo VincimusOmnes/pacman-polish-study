@@ -2,10 +2,10 @@
 
 [ext_resource type="PackedScene" uid="uid://cv6fv0t3bd18v" path="res://maze.tscn" id="1_e2o6t"]
 [ext_resource type="Script" uid="uid://kmcywng375dq" path="res://game.gd" id="1_feb5d"]
-[ext_resource type="PackedScene" uid="uid://50q72se6ljdc" path="res://pacman.tscn" id="2_feb5d"]
 [ext_resource type="PackedScene" uid="uid://bydogw2u4ghma" path="res://pellet.tscn" id="4_fc0e3"]
 [ext_resource type="PackedScene" uid="uid://dig826tjdosh7" path="res://ghost.tscn" id="4_ryrav"]
 [ext_resource type="PackedScene" uid="uid://cgum8lgecfhw4" path="res://power_pellet.tscn" id="5_7jktm"]
+[ext_resource type="PackedScene" uid="uid://dg14n8bbmvba2" path="res://pacman_alt.tscn" id="5_e8heu"]
 [ext_resource type="Script" uid="uid://dylbgeorixiag" path="res://camera_2d.gd" id="7_215e1"]
 [ext_resource type="AudioStream" uid="uid://d15ov8ilhi4es" path="res://assets/sound/start.wav" id="7_j5wjh"]
 [ext_resource type="Script" uid="uid://dugv77jntubcd" path="res://ui.gd" id="7_lc2xo"]
@@ -808,9 +808,8 @@ position = Vector2(212, 188)
 [node name="PowerPellet4" parent="PowerPellets" instance=ExtResource("5_7jktm")]
 position = Vector2(11, 188)
 
-[node name="Pacman" parent="." instance=ExtResource("2_feb5d")]
+[node name="Pacman" parent="." instance=ExtResource("5_e8heu")]
 position = Vector2(202, 228)
-collision_mask = 32800
 
 [node name="Ghosts" type="Node2D" parent="."]
 position = Vector2(90, 40)

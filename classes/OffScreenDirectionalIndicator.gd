@@ -1,15 +1,15 @@
+# A fairly reusable script to point an indicator at a node that's off screen
+# You might have to mess around with the node's offset, and flip to get it to
+# point correctly.
+# This script does not handle a copy of the node, that will need to be handled
+# elsewhere.
+
 class_name OffScreenDirectionalIndicator extends VisibleOnScreenNotifier2D
 
 @export var node_to_point: Node2D
 @export var icon: Node2D
 
 @onready var parent: Node = get_parent()
-
-
-func _ready() -> void:
-	return
-	#screen_entered.connect(_on_screen_entered)
-	#screen_exited.connect(_on_screen_exited)
 
 func _process(_delta: float) -> void:
 	if !is_on_screen():
