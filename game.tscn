@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://dfuxcfhse4nt3"]
+[gd_scene load_steps=24 format=3 uid="uid://dfuxcfhse4nt3"]
 
 [ext_resource type="PackedScene" uid="uid://cv6fv0t3bd18v" path="res://maze.tscn" id="1_e2o6t"]
 [ext_resource type="Script" uid="uid://kmcywng375dq" path="res://game.gd" id="1_feb5d"]
@@ -14,6 +14,7 @@
 [ext_resource type="Shader" uid="uid://bcv6bmn7khhop" path="res://shaders/shockwave.gdshader" id="9_80cx4"]
 [ext_resource type="Texture2D" uid="uid://kalav1jieg66" path="res://assets/ui/level.png" id="9_lc2xo"]
 [ext_resource type="Script" uid="uid://b4ofwhr1qt13p" path="res://Shockwave.gd" id="10_e8heu"]
+[ext_resource type="Shader" uid="uid://rysrj0sx4o55" path="res://shaders/fisheye.gdshader" id="11_rvswv"]
 [ext_resource type="Texture2D" uid="uid://dxfaig3v147jl" path="res://assets/ui/score.png" id="12_iotsf"]
 [ext_resource type="AudioStream" uid="uid://b3kb22hbc5uuu" path="res://assets/sound/eat_fruit.wav" id="12_lc2xo"]
 [ext_resource type="Script" uid="uid://tkfdntcxvwdj" path="res://debug_arrows.gd" id="14_215e1"]
@@ -32,6 +33,30 @@ tracks/0/keys = {
 "update": 0,
 "values": [Vector2(2, 2)]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CanvasLayer2/Fisheye:material:shader_parameter/effect_amount")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.010000119224999882]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("CanvasLayer2/Fisheye:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
 
 [sub_resource type="Animation" id="Animation_215e1"]
 resource_name = "slow_breathe_out"
@@ -48,6 +73,30 @@ tracks/0/keys = {
 "update": 0,
 "values": [Vector2(2, 2), Vector2(1.8, 1.8), Vector2(4, 4)]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CanvasLayer2/Fisheye:material:shader_parameter/effect_amount")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1.2333333, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [1.1875000005545644e-07, 1.2790001795025, -0.3149998962125]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("CanvasLayer2/Fisheye:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"update": 0,
+"values": []
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_80cx4"]
 _data = {
@@ -63,6 +112,10 @@ shader_parameter/radius = 0.25
 shader_parameter/aberration = 0.425
 shader_parameter/width = 0.04
 shader_parameter/feather = 0.135
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_boyg6"]
+shader = ExtResource("11_rvswv")
+shader_parameter/effect_amount = 0.010000119224999882
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_feb5d")
@@ -884,6 +937,18 @@ shader_material = SubResource("ShaderMaterial_e8heu")
 radius_end = 1.0
 duration = 1.0
 metadata/_custom_type_script = "uid://b4ofwhr1qt13p"
+
+[node name="CanvasLayer2" type="CanvasLayer" parent="Camera2D"]
+follow_viewport_enabled = true
+
+[node name="Fisheye" type="ColorRect" parent="Camera2D/CanvasLayer2"]
+visible = false
+material = SubResource("ShaderMaterial_boyg6")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="UI" type="Control" parent="."]
 layout_mode = 3

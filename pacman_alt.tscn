@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://dg14n8bbmvba2"]
+[gd_scene load_steps=22 format=3 uid="uid://dg14n8bbmvba2"]
 
 [ext_resource type="Script" uid="uid://brsou2qqmb250" path="res://PacmanAlt.gd" id="1_qiuay"]
 [ext_resource type="Texture2D" uid="uid://fo3wodr86svc" path="res://assets/pacman/die/1.png" id="2_7o676"]
@@ -15,6 +15,23 @@
 [ext_resource type="Texture2D" uid="uid://du2t56lcx41gq" path="res://assets/pacman/move/2.png" id="13_ntw6s"]
 [ext_resource type="Texture2D" uid="uid://bujg5h2q0t4ws" path="res://assets/pacman/move/3.png" id="14_1pfxa"]
 [ext_resource type="Texture2D" uid="uid://hyvys12y47c0" path="res://assets/pacman/move/1.png" id="15_q1vjq"]
+[ext_resource type="Texture2D" uid="uid://det2c28yrnbye" path="res://assets/particles/puff.png" id="16_7o676"]
+
+[sub_resource type="Gradient" id="Gradient_7o676"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_gns25"]
+gradient = SubResource("Gradient_7o676")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_qiuay"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(0.765, 1.11, 1)
+gravity = Vector3(0, 0, 0)
+scale_min = 0.01
+scale_max = 0.02
+scale_over_velocity_max = 0.02
+color_ramp = SubResource("GradientTexture1D_gns25")
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_riore"]
 animations = [{
@@ -52,7 +69,7 @@ animations = [{
 "duration": 1.0,
 "texture": ExtResource("12_hg4s5")
 }],
-"loop": true,
+"loop": false,
 "name": &"pacman_die",
 "speed": 3.2
 }, {
@@ -81,11 +98,15 @@ radius = 5.0
 motion_mode = 1
 script = ExtResource("1_qiuay")
 
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+position = Vector2(-5, 0)
+amount = 15
+texture = ExtResource("16_7o676")
+process_material = SubResource("ParticleProcessMaterial_qiuay")
+
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-rotation = 1.5707964
 sprite_frames = SubResource("SpriteFrames_riore")
 animation = &"pacman_die"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-2, 0)
 shape = SubResource("CircleShape2D_qiuay")

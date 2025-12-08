@@ -3,6 +3,7 @@ extends Camera2D
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var shake: Shake = $Shake
 @onready var shockwave: Shockwave = $CanvasLayer/Shockwave
+@onready var fisheye: ColorRect = $CanvasLayer2/Fisheye
 
 
 
@@ -13,6 +14,7 @@ var focused_node: Node = null
 func _ready() -> void:
 	SignalBus.camera_focused.connect(_on_camera_focused)
 	animation_player.animation_finished.connect(_on_animation_finished)
+	fisheye.visible = true
 	
 func _on_animation_finished(animation_name: StringName) -> void:
 	if animation_name == "slow_breathe_out":
