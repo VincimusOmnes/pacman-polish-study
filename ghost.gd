@@ -3,7 +3,7 @@ extends Assets
 @onready var animation_node: AnimatedSprite2D = $AnimatedSprite2D
 @onready var animation_copy: AnimatedSprite2D = $Sprite2D/AnimatedSprite2D2
 @onready var maze_node: Node2D = $"../../Maze"
-@onready var pacman: CharacterBody2D = $"../../Pacman"
+#@onready var pacman: CharacterBody2D = $"../../Pacman"
 @onready var game_node: Node2D = $"../.."
 
 
@@ -213,6 +213,7 @@ func _physics_process(delta: float) -> void:
 		pass
 
 func get_target() -> Vector2:
+	var pacman: Assets = PlayerManager.player_node
 	var taget := Vector2.ZERO
 	if is_died == true:
 		target = Globals.GHOST_HOUSE_POSITION

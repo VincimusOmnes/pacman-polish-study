@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://bydogw2u4ghma" path="res://pellet.tscn" id="4_fc0e3"]
 [ext_resource type="PackedScene" uid="uid://dig826tjdosh7" path="res://ghost.tscn" id="4_ryrav"]
 [ext_resource type="PackedScene" uid="uid://cgum8lgecfhw4" path="res://power_pellet.tscn" id="5_7jktm"]
-[ext_resource type="PackedScene" uid="uid://dg14n8bbmvba2" path="res://pacman_alt.tscn" id="5_e8heu"]
+[ext_resource type="PackedScene" uid="uid://50q72se6ljdc" path="res://pacman.tscn" id="5_rvswv"]
 [ext_resource type="Script" uid="uid://dylbgeorixiag" path="res://camera_2d.gd" id="7_215e1"]
 [ext_resource type="AudioStream" uid="uid://d15ov8ilhi4es" path="res://assets/sound/start.wav" id="7_j5wjh"]
 [ext_resource type="Script" uid="uid://dugv77jntubcd" path="res://ui.gd" id="7_lc2xo"]
@@ -43,7 +43,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [0.010000119224999882]
+"values": [0.01000011922499988]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -83,7 +83,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0, 1.2333333, 1.5),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [1.1875000005545644e-07, 1.2790001795025, -0.3149998962125]
+"values": [1.1875000005545645e-07, 1.2790001795025, -0.3149998962125]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -115,7 +115,7 @@ shader_parameter/feather = 0.135
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_boyg6"]
 shader = ExtResource("11_rvswv")
-shader_parameter/effect_amount = 0.010000119224999882
+shader_parameter/effect_amount = 0.01000011922499988
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_feb5d")
@@ -861,7 +861,7 @@ position = Vector2(212, 188)
 [node name="PowerPellet4" parent="PowerPellets" instance=ExtResource("5_7jktm")]
 position = Vector2(11, 188)
 
-[node name="Pacman" parent="." instance=ExtResource("5_e8heu")]
+[node name="Pacman" parent="." instance=ExtResource("5_rvswv")]
 position = Vector2(202, 228)
 
 [node name="Ghosts" type="Node2D" parent="."]

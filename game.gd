@@ -169,7 +169,7 @@ func level_ended():
 func get_pacman_overlap() -> Array[CharacterBody2D]:
 	var bodies: Array[CharacterBody2D] = []
 	for ghost in ghosts_node.get_children():
-		if pacman_node.is_overlapping_with(ghost):
+		if PlayerManager.player_node.is_overlapping_with(ghost):
 			if Globals.cheat_activated == false and Globals.is_game_ended == false:
 				bodies.append(ghost)
 	return bodies
