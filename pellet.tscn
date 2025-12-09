@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://bydogw2u4ghma"]
+[gd_scene load_steps=7 format=3 uid="uid://bydogw2u4ghma"]
 
 [ext_resource type="Texture2D" uid="uid://cwte2hhe2st3t" path="res://assets/pellets.png" id="1_6rd4r"]
 [ext_resource type="Script" uid="uid://cgrfxvfcb873m" path="res://pellet.gd" id="1_cesqr"]
@@ -6,7 +6,26 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cesqr"]
 size = Vector2(0, 0)
 
+[sub_resource type="Gradient" id="Gradient_cesqr"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_nf1bb"]
+gradient = SubResource("Gradient_cesqr")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_cesqr"]
+particle_flag_disable_z = true
+direction = Vector3(0, 0, 0)
+spread = 180.0
+initial_velocity_min = 30.0
+initial_velocity_max = 45.0
+gravity = Vector3(0, 0, 0)
+scale_min = 1.6999999
+scale_max = 2.0
+color = Color(1, 0.7176471, 0.68235296, 1)
+color_ramp = SubResource("GradientTexture1D_nf1bb")
+
 [node name="Pellet" type="Area2D"]
+z_index = 4096
 script = ExtResource("1_cesqr")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
@@ -14,5 +33,13 @@ texture = ExtResource("1_6rd4r")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_cesqr")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+z_index = 4096
+emitting = false
+lifetime = 0.2
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_cesqr")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
