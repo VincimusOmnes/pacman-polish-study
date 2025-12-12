@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://dfuxcfhse4nt3"]
+[gd_scene load_steps=25 format=3 uid="uid://dfuxcfhse4nt3"]
 
 [ext_resource type="PackedScene" uid="uid://cv6fv0t3bd18v" path="res://maze.tscn" id="1_e2o6t"]
 [ext_resource type="Script" uid="uid://kmcywng375dq" path="res://game.gd" id="1_feb5d"]
@@ -13,7 +13,7 @@
 [ext_resource type="Script" uid="uid://bg3e4wx67roke" path="res://classes/Shake.gd" id="8_7sc4i"]
 [ext_resource type="Shader" uid="uid://bcv6bmn7khhop" path="res://shaders/shockwave.gdshader" id="9_80cx4"]
 [ext_resource type="Texture2D" uid="uid://kalav1jieg66" path="res://assets/ui/level.png" id="9_lc2xo"]
-[ext_resource type="Script" uid="uid://b4ofwhr1qt13p" path="res://Shockwave.gd" id="10_e8heu"]
+[ext_resource type="Script" path="res://Shockwave.gd" id="10_e8heu"]
 [ext_resource type="Shader" uid="uid://rysrj0sx4o55" path="res://shaders/fisheye.gdshader" id="11_rvswv"]
 [ext_resource type="Texture2D" uid="uid://dxfaig3v147jl" path="res://assets/ui/score.png" id="12_iotsf"]
 [ext_resource type="AudioStream" uid="uid://b3kb22hbc5uuu" path="res://assets/sound/eat_fruit.wav" id="12_lc2xo"]
@@ -116,6 +116,12 @@ shader_parameter/feather = 0.135
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_boyg6"]
 shader = ExtResource("11_rvswv")
 shader_parameter/effect_amount = 0.01000011922499988
+
+[sub_resource type="Environment" id="Environment_rvswv"]
+background_mode = 3
+glow_enabled = true
+glow_intensity = 2.51
+glow_bloom = 0.25
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_feb5d")
@@ -936,7 +942,6 @@ script = ExtResource("10_e8heu")
 shader_material = SubResource("ShaderMaterial_e8heu")
 radius_end = 1.0
 duration = 1.0
-metadata/_custom_type_script = "uid://b4ofwhr1qt13p"
 
 [node name="CanvasLayer2" type="CanvasLayer" parent="Camera2D"]
 follow_viewport_enabled = true
@@ -1036,6 +1041,9 @@ stream = ExtResource("12_lc2xo")
 [node name="DebugArrows" type="Node2D" parent="."]
 position = Vector2(90, 40)
 script = ExtResource("14_215e1")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_rvswv")
 
 [connection signal="timeout" from="FrightenTimer" to="." method="_on_frighten_timer_timeout"]
 [connection signal="timeout" from="BlinkTimer" to="." method="_on_blink_timer_timeout"]
