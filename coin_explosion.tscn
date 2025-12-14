@@ -1,0 +1,58 @@
+[gd_scene load_steps=9 format=3 uid="uid://n3vj2e4oeibk"]
+
+[ext_resource type="Script" uid="uid://drli3ehdqxxny" path="res://CoinExplosion.gd" id="1_jus4m"]
+[ext_resource type="Shader" uid="uid://dgelmmlfhggsx" path="res://fish.gdshader" id="1_kv8oe"]
+[ext_resource type="ArrayMesh" uid="uid://dc2sakg2q7r35" path="res://assets/coin_array_mesh.tres" id="2_jus4m"]
+[ext_resource type="Script" uid="uid://bfw0ng61c5w6r" path="res://classes/ExpandingCircle.gd" id="4_e6bhe"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_e36ub"]
+shader = ExtResource("1_kv8oe")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_qhcbd"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="Curve" id="Curve_e6bhe"]
+_data = [Vector2(0, 0), 0.0, 3.8840008, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_6ljpj"]
+_data = [Vector2(0, 0.8466425), 0.0, 0.0, 0, 0, Vector2(0.33254156, 0.3747732), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[node name="CoinExplosionNode2D" type="Node2D" node_paths=PackedStringArray("particle", "sprite", "expanding_circle")]
+scale = Vector2(0.31, 0.31)
+script = ExtResource("1_jus4m")
+particle = NodePath("SubViewport/GPUParticles3D2")
+sprite = NodePath("Sprite2D")
+expanding_circle = NodePath("ExpandingCircle")
+
+[node name="SubViewport" type="SubViewport" parent="."]
+transparent_bg = true
+
+[node name="Camera2D" type="Camera3D" parent="SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.009911835, 0.9573148)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3.4293475)
+light_energy = 10.527
+
+[node name="GPUParticles3D2" type="GPUParticles3D" parent="SubViewport"]
+emitting = false
+amount = 5
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ShaderMaterial_e36ub")
+draw_pass_1 = ExtResource("2_jus4m")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = SubResource("ViewportTexture_qhcbd")
+
+[node name="ExpandingCircle" type="Node2D" parent="."]
+script = ExtResource("4_e6bhe")
+duration = 0.4
+max_radius = 50.0
+max_thickness = 10.0
+radius_interpolation = SubResource("Curve_e6bhe")
+thickness_interpolation = SubResource("Curve_6ljpj")
+one_shot = true
+metadata/_custom_type_script = "uid://bfw0ng61c5w6r"

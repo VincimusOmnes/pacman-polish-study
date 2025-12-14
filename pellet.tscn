@@ -25,7 +25,6 @@ color = Color(1, 0.7176471, 0.68235296, 1)
 color_ramp = SubResource("GradientTexture1D_nf1bb")
 
 [node name="Pellet" type="Area2D"]
-z_index = 4096
 script = ExtResource("1_cesqr")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

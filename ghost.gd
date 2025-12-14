@@ -1,4 +1,7 @@
-extends Assets
+class_name Ghost extends Assets
+
+const FLOATING_TEXT_SCENE: PackedScene = preload("res://floating_text.tscn")
+const COIN_EXPLOSION_SCENE: PackedScene = preload("res://coin_explosion.tscn")
 
 @onready var animation_node: AnimatedSprite2D = $AnimatedSprite2D
 @onready var animation_copy: AnimatedSprite2D = $Sprite2D/AnimatedSprite2D2
@@ -59,6 +62,18 @@ func returned_ghost_house():
 	game_node.check_cruise_elroy()
 
 func die():
+	SignalBus.ghost_died.emit(self)
+	var floating_text = FLOATING_TEXT_SCENE.instantiate()
+	get_parent().get_parent().add_child(floating_text)
+	floating_text.global_position = self.global_position
+	floating_text.get_child(0).play("float_and_disappear")
+	
+	var coin_explosion: CoinExplosion = COIN_EXPLOSION_SCENE.instantiate()
+	coin_explosion.expanding_circle.color = _color.lightened(0.3)
+	get_parent().get_parent().add_child(coin_explosion)
+	coin_explosion.global_position = self.global_position
+	coin_explosion.particle.emitting = true
+	
 	is_died = true
 	is_frightened = false
 	is_last_2_second = false
