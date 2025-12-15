@@ -1,4 +1,4 @@
-extends Assets
+class_name PacmanAlt extends Assets
 
 const ROTATION_SPEED: float = 4.0
 const BOUNCE_DAMPING: float = 0.7

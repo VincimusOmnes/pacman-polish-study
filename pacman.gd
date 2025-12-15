@@ -5,6 +5,8 @@ extends Assets
 
 var pacman_speed: float = 60.0
 
+var has_input: bool = false
+
 var rotation_degree_from_direction = {
 	Vector2.RIGHT: 0,
 	Vector2.DOWN: 90,
@@ -41,9 +43,14 @@ func _ready() -> void:
 	pause_animation()
 	start_move(Vector2.LEFT, pacman_speed)
 	rotate_animation(Vector2.LEFT)
+	get_tree().create_timer(8.0).timeout.connect(_on_start_timeout)
 	
 func get_local_position():
 	return Vector2(position.x - ghosts_node.position.x, position.y - ghosts_node.position.y)
+
+func _on_start_timeout() -> void:
+	if !has_input:
+		SignalBus.no_input.emit()
 
 func _process(delta: float) -> void:
 	pass
@@ -81,6 +88,9 @@ func _input(event: InputEvent) -> void:
 		next_direction = Vector2.LEFT
 	if event.is_action_pressed("ui_right"):
 		next_direction = Vector2.RIGHT
+	if next_direction != Vector2.ZERO:
+		has_input = true
+		SignalBus.yes_input.emit()
 
 var drag_start_pos := Vector2.ZERO
 var drag_threshold := 20  # minimum hareket (piksel cinsinden) swipe sayılmalı

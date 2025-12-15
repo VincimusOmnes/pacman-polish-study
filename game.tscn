@@ -120,8 +120,9 @@ shader_parameter/effect_amount = 0.01000011922499988
 [sub_resource type="Environment" id="Environment_rvswv"]
 background_mode = 3
 glow_enabled = true
-glow_intensity = 2.51
+glow_intensity = 1.45
 glow_bloom = 0.25
+glow_hdr_threshold = 0.0
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_feb5d")

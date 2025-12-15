@@ -21,12 +21,18 @@ func _on_animation_finished(animation_name: StringName) -> void:
 		shake.start_shake()
 		shockwave.start_shockwave()
 		get_tree().paused = false
+		SignalBus.power_pellet_eaten.emit(self.global_position)
+
 	
 func _on_camera_focused(node_to_focus: Node) -> void:
 	# What I want is like a slow zoom out with a crash zoom in following it
-	animation_player.play("slow_breathe_out")
+	if !focused_node is PacmanAlt:
+		animation_player.play("slow_breathe_out")
+		get_tree().paused = true
+	else:
+		_on_animation_finished("slow_breathe_out")
 	focused_node = node_to_focus
-	get_tree().paused = true
+	
 	
 func _process(_delta: float) -> void:
 	if focused_node:

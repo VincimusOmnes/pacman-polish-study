@@ -26,7 +26,7 @@ func _on_timer_timeout() -> void:
 
 
 func _on_body_entered(body: Node2D) -> void:
-	if body.name == "Pacman":
+	if body.is_in_group("pacman"):
 		game_node.add_score(Globals.fruit_score[index])
 		Globals.last_fruit_eaten.append(index)
 		game_node.draw_last_eaten_fruits()

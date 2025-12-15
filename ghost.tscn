@@ -1,7 +1,8 @@
-[gd_scene load_steps=54 format=3 uid="uid://dig826tjdosh7"]
+[gd_scene load_steps=56 format=3 uid="uid://dig826tjdosh7"]
 
 [ext_resource type="Texture2D" uid="uid://bbwe7d0anuinu" path="res://assets/ghosts/cyan/down1.png" id="1_ddsli"]
 [ext_resource type="Script" uid="uid://dpha0xt6eqjmi" path="res://ghost.gd" id="1_i8mp4"]
+[ext_resource type="Shader" uid="uid://dabq0aoa7sv2b" path="res://glow.gdshader" id="2_3urrm"]
 [ext_resource type="Texture2D" uid="uid://dnqj6fmbjk13e" path="res://assets/ghosts/cyan/down2.png" id="2_i8mp4"]
 [ext_resource type="Texture2D" uid="uid://bt8jlxvxs7gvg" path="res://assets/ghosts/cyan/left1.png" id="3_paher"]
 [ext_resource type="Texture2D" uid="uid://coda4pe1xckfq" path="res://assets/ghosts/cyan/left2.png" id="4_yi44q"]
@@ -350,12 +351,21 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wmca4"]
 size = Vector2(14, 14)
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_doq6v"]
+shader = ExtResource("2_3urrm")
+shader_parameter/max_line_width = 2.32
+shader_parameter/min_line_width = 1.0
+shader_parameter/freq = 1.0
+shader_parameter/block_size = 1.15
+shader_parameter/starting_colour = Vector4(0, 0, 17.705, 1)
+shader_parameter/ending_colour = Vector4(1, 0.42, -3.115, 0.555)
+
 [node name="Ghost" type="CharacterBody2D"]
 script = ExtResource("1_i8mp4")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_u4bdu")
-animation = &"cyan_left"
+animation = &"cyan_down"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_wmca4")
@@ -380,3 +390,11 @@ position = Vector2(8.5, 0.5)
 scale = Vector2(0.41, 0.41)
 sprite_frames = SubResource("SpriteFrames_u4bdu")
 animation = &"cyan_left"
+
+[node name="ColorRect" type="ColorRect" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_doq6v")
+offset_left = -8.0
+offset_top = -8.0
+offset_right = 7.0
+offset_bottom = 8.0

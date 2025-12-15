@@ -9,7 +9,7 @@ func _ready() -> void:
 	particles.finished.connect(_on_particles_finished)
 
 func _on_body_entered(body: Node2D) -> void:
-	if body.name == "Pacman" or body.name == "PacmanAlt":
+	if body.is_in_group("pacman"):
 		particles.emitting = true
 		sprite.visible = false
 		Globals.pellets_eaten_string.append(name)

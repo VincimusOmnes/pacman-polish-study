@@ -23,7 +23,9 @@ func switch_pacmans() -> Assets:
 	var new_pacman: Assets = alt_pacman.instantiate()
 	old_pacman.get_parent().add_child(new_pacman)
 	new_pacman.position = old_pacman.position
-	set_new_pacman_direction(new_pacman, old_pacman.next_direction)
+	new_pacman.rotation_degrees = old_pacman.rotation_degrees
+	if !old_pacman is PacmanAlt:
+		set_new_pacman_direction(new_pacman, old_pacman.next_direction)
 	PlayerManager.player_node = new_pacman
 	old_pacman.queue_free()
 	return new_pacman
@@ -40,7 +42,7 @@ func set_new_pacman_direction(new_pacman: Assets, old_direction: Vector2) -> voi
 	new_pacman.rotation_degrees = new_rotation
 
 func _on_body_entered(body: Node2D) -> void:
-	if body.name == "Pacman":
+	if body.is_in_group("pacman"):
 		handle_polish()
 		game_node.add_score(50)
 		Globals.ghost_eaten_since_last_frighten = 0
